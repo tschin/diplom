@@ -16,6 +16,7 @@ public:
     ~MainWindow();
 private slots:
     void TestSlot();
+    void Cylinder();
 private:
     Ui::MainWindow *ui;
 };

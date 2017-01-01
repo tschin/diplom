@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMenu * check = new QMenu("Выбор и расчет протяжки",ui->menuBar);
 
             QAction* cylinder = check->addAction("Цилиндрическая протяжка");
-    connect(cylinder, SIGNAL(triggered(bool)), this, SLOT(TestSlot()));
+    connect(cylinder, SIGNAL(triggered(bool)), this, SLOT(Cylinder()));
 
 
             QAction* facet = check->addAction("Гранная протяжка");
@@ -30,6 +30,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(slotted, SIGNAL(triggered(bool)), this, SLOT(TestSlot()));
     ui->menuBar->addMenu(check);
 
+    ui->tabWidget->setTabText(0,"Отверствие");
+    ui->tabWidget->setTabText(1,"Станок");
+   // ui->
+
+
+
 
 
 }
@@ -41,5 +47,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::TestSlot()
 {
+
+}
+
+void MainWindow::Cylinder()
+{
+    ui->stackedWidget->setCurrentIndex(1);
 
 }
