@@ -2,7 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include<QHeaderView>
+struct tool
+{
+    QString type;
+    QString model;
+    int power;
+    int step;
+};
 namespace Ui {
 class MainWindow;
 }
@@ -19,6 +26,8 @@ private slots:
     void Cylinder();
 private:
     Ui::MainWindow *ui;
+    void FillTable();
+    QList<tool> GetTools();
 };
 
 #endif // MAINWINDOW_H
