@@ -10,6 +10,11 @@ struct tool
     int power;
     int step;
 };
+struct material
+{
+    QString group;
+    QString mark;
+};
 namespace Ui {
 class MainWindow;
 }
@@ -27,9 +32,12 @@ private slots:
     void SwitchTable(bool);
 private:
     Ui::MainWindow *ui;
-    void FillTableCylinderVertical();
+    void FillTableTool();
+    void FillTableMaterial();
     void FillTableCylinderHorizontal();
     QList<tool> GetToolsCylinderVertical();
+    QList<material> GetMaterial();
+
     QList<tool> GetToolsCylinderHorizontal();
 
 };
