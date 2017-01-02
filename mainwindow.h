@@ -24,10 +24,14 @@ public:
 private slots:
     void TestSlot();
     void Cylinder();
+    void SwitchTable(bool);
 private:
     Ui::MainWindow *ui;
-    void FillTable();
-    QList<tool> GetTools();
+    void FillTableCylinderVertical();
+    void FillTableCylinderHorizontal();
+    QList<tool> GetToolsCylinderVertical();
+    QList<tool> GetToolsCylinderHorizontal();
+
 };
 
 #endif // MAINWINDOW_H
