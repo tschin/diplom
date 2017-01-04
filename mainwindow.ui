@@ -35,7 +35,7 @@
         <item>
          <widget class="QTabWidget" name="tabWidget">
           <property name="currentIndex">
-           <number>2</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="title">
@@ -237,6 +237,111 @@
            <attribute name="title">
             <string>Обработка</string>
            </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item alignment="Qt::AlignTop">
+             <widget class="QGroupBox" name="groupBox">
+              <property name="title">
+               <string>Процесс резания сопровождается:</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item alignment="Qt::AlignTop">
+                  <widget class="QRadioButton" name="radioButton_4">
+                   <property name="text">
+                    <string>Усадкой</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item alignment="Qt::AlignTop">
+                  <widget class="QRadioButton" name="radioButton_3">
+                   <property name="text">
+                    <string>Разбивкой</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignTop">
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string>Смазочно-охлождающая жидкость:</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_5">
+               <item row="0" column="0">
+                <layout class="QGridLayout" name="gridLayout_4">
+                 <item row="1" column="0">
+                  <widget class="QRadioButton" name="radioButton_6">
+                   <property name="text">
+                    <string>3-10% эмульсия из эмульсола &quot;Укринол-1&quot;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QRadioButton" name="radioButton_9">
+                   <property name="text">
+                    <string>10% эмульсия из эмульсола Э-2</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QRadioButton" name="radioButton_7">
+                   <property name="text">
+                    <string>5% эмульсия из эмульсола СДМУ-2</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QRadioButton" name="radioButton_5">
+                   <property name="text">
+                    <string>без смазки и охлаждения</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QRadioButton" name="radioButton_8">
+                   <property name="text">
+                    <string>5% эмульсия из эмульсола Э-2</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QRadioButton" name="radioButton_10">
+                   <property name="text">
+                    <string>5-7% эмульсия из эмульсола Т</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QRadioButton" name="radioButton_11">
+                   <property name="text">
+                    <string>масло ОСМ-3</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QRadioButton" name="radioButton_12">
+                   <property name="text">
+                    <string>масло индустриальное И-12А</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QRadioButton" name="radioButton_13">
+                   <property name="text">
+                    <string>сульфофрезол</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>
