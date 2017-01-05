@@ -29,13 +29,37 @@
       <property name="currentIndex">
        <number>1</number>
       </property>
-      <widget class="QWidget" name="page"/>
+      <widget class="QWidget" name="page">
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="font">
+             <font>
+              <pointsize>27</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Добро пожаловать!</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="page_2">
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
          <widget class="QTabWidget" name="tabWidget">
           <property name="currentIndex">
-           <number>3</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="title">
@@ -43,7 +67,7 @@
            </attribute>
            <layout class="QGridLayout" name="gridLayout">
             <item row="2" column="0">
-             <widget class="QSpinBox" name="spinBox"/>
+             <widget class="QSpinBox" name="d0SpinBox"/>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label">
@@ -85,7 +109,7 @@
              </widget>
             </item>
             <item row="4" column="0">
-             <widget class="QSpinBox" name="spinBox_2"/>
+             <widget class="QSpinBox" name="l_spinBox"/>
             </item>
             <item row="9" column="2">
              <widget class="QLabel" name="label_7">
@@ -101,7 +125,7 @@
              </widget>
             </item>
             <item row="6" column="0">
-             <widget class="QSpinBox" name="spinBox_3"/>
+             <widget class="QSpinBox" name="ra_spinBox"/>
             </item>
             <item row="1" column="1">
              <widget class="QLabel" name="label_4">
@@ -114,7 +138,7 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="spinBox_4"/>
+             <widget class="QSpinBox" name="kval_spinBox"/>
             </item>
             <item row="8" column="2">
              <widget class="QLabel" name="label_6">
@@ -130,13 +154,13 @@
              </widget>
             </item>
             <item row="8" column="3">
-             <widget class="QSpinBox" name="spinBox_6"/>
+             <widget class="QSpinBox" name="hi_spinBox"/>
             </item>
             <item row="9" column="3">
-             <widget class="QSpinBox" name="spinBox_7"/>
+             <widget class="QSpinBox" name="low_spinBox"/>
             </item>
             <item row="6" column="1">
-             <widget class="QSpinBox" name="spinBox_5"/>
+             <widget class="QSpinBox" name="d_spinBox"/>
             </item>
             <item row="5" column="1">
              <widget class="QLabel" name="label_5">
@@ -159,7 +183,7 @@
            </attribute>
            <layout class="QGridLayout" name="gridLayout_3">
             <item row="1" column="0" colspan="2">
-             <widget class="QTableWidget" name="tableWidget">
+             <widget class="QTableWidget" name="verticalTableWidget">
               <property name="columnCount">
                <number>3</number>
               </property>
@@ -187,7 +211,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QRadioButton" name="radioButton_2">
+             <widget class="QRadioButton" name="horizontalRadioButton">
               <property name="text">
                <string>Горизонтального типа</string>
               </property>
@@ -196,7 +220,7 @@
             <item row="0" column="0">
              <layout class="QGridLayout" name="gridLayout_2">
               <item row="0" column="0">
-               <widget class="QRadioButton" name="radioButton">
+               <widget class="QRadioButton" name="verticalRadioButton">
                 <property name="text">
                  <string>Вертикального типа</string>
                 </property>
@@ -205,7 +229,7 @@
              </layout>
             </item>
             <item row="2" column="0" colspan="2">
-             <widget class="QTableWidget" name="tableWidget_2"/>
+             <widget class="QTableWidget" name="horizontalTableWidget"/>
             </item>
            </layout>
           </widget>
@@ -217,7 +241,7 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout">
               <item>
-               <widget class="QTableWidget" name="tableWidget_3"/>
+               <widget class="QTableWidget" name="materialTableWidget"/>
               </item>
               <item>
                <widget class="QLabel" name="label_8">
@@ -227,7 +251,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBox_8"/>
+               <widget class="QSpinBox" name="materialSpinBox"/>
               </item>
              </layout>
             </item>
@@ -247,7 +271,7 @@
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout">
                  <item alignment="Qt::AlignTop">
-                  <widget class="QRadioButton" name="radioButton_4">
+                  <widget class="QRadioButton" name="usadkaRadioButton">
                    <property name="text">
                     <string>Усадкой</string>
                    </property>
@@ -343,6 +367,13 @@
             </item>
            </layout>
           </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>Начать расчет</string>
+          </property>
          </widget>
         </item>
        </layout>

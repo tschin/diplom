@@ -29,9 +29,31 @@ MainWindow::MainWindow(QWidget *parent) :
             QAction* slotted = check->addAction("Шлицевая протяжка");
     connect(slotted, SIGNAL(triggered(bool)), this, SLOT(TestSlot()));
     ui->menuBar->addMenu(check);
-    connect(ui->radioButton, SIGNAL(clicked(bool)), this, SLOT(SwitchTable(bool)));
-    connect(ui->radioButton_2, SIGNAL(clicked(bool)), this, SLOT(SwitchTable(bool)));
-    ui->tableWidget_2->setVisible(false);
+    connect(ui->verticalRadioButton, SIGNAL(clicked(bool)), this, SLOT(SwitchTable(bool)));
+    connect(ui->horizontalRadioButton, SIGNAL(clicked(bool)), this, SLOT(SwitchTable(bool)));
+    ui->horizontalTableWidget->setVisible(false);
+    ui->stackedWidget->setCurrentIndex(0);
+    connect(ui->radioButton_5, SIGNAL(toggled(bool)), this, SLOT(slotRadioToggled(bool)));
+
+    connect(ui->radioButton_6, SIGNAL(toggled(bool)), this, SLOT(slotRadioToggled(bool)));
+    connect(ui->radioButton_7, SIGNAL(toggled(bool)), this, SLOT(slotRadioToggled(bool)));
+    connect(ui->radioButton_8, SIGNAL(toggled(bool)), this, SLOT(slotRadioToggled(bool)));
+    connect(ui->radioButton_9, SIGNAL(toggled(bool)), this, SLOT(slotRadioToggled(bool)));
+    connect(ui->radioButton_10, SIGNAL(toggled(bool)), this, SLOT(slotRadioToggled(bool)));
+    connect(ui->radioButton_11, SIGNAL(toggled(bool)), this, SLOT(slotRadioToggled(bool)));
+    connect(ui->radioButton_12, SIGNAL(toggled(bool)), this, SLOT(slotRadioToggled(bool)));
+    connect(ui->radioButton_13, SIGNAL(toggled(bool)), this, SLOT(slotRadioToggled(bool)));
+
+    listHBRadioButton.append(ui->radioButton_5);
+    listHBRadioButton.append(ui->radioButton_6);
+    listHBRadioButton.append(ui->radioButton_7);
+    listHBRadioButton.append(ui->radioButton_8);
+    listHBRadioButton.append(ui->radioButton_9);
+    listHBRadioButton.append(ui->radioButton_10);
+    listHBRadioButton.append(ui->radioButton_11);
+    listHBRadioButton.append(ui->radioButton_12);
+    listHBRadioButton.append(ui->radioButton_13);
+
     FillTableTool();
     FillTableMaterial();
 
@@ -63,18 +85,18 @@ void MainWindow::SwitchTable(bool)
 {
     QTableWidget * tableWidget;
 
-    if(ui->radioButton->isChecked())
+    if(ui->verticalRadioButton->isChecked())
     {
-        tableWidget=ui->tableWidget;
+        tableWidget=ui->verticalTableWidget;
         tableWidget->setVisible(true);
-        ui->tableWidget_2->setVisible(false);
+        ui->horizontalTableWidget->setVisible(false);
 
     }
-    if(ui->radioButton_2->isChecked())
+    if(ui->horizontalRadioButton->isChecked())
     {
-        tableWidget=ui->tableWidget_2;
+        tableWidget=ui->horizontalTableWidget;
         tableWidget->setVisible(true);
-        ui->tableWidget->setVisible(false);
+        ui->verticalTableWidget->setVisible(false);
 
     }
     if(tableWidget->rowCount()==0)
@@ -87,19 +109,19 @@ void MainWindow::FillTableTool()
 {
     QTableWidget * tableWidget;
     QList<tool> toolList;
-    if(ui->radioButton->isChecked())
+    if(ui->verticalRadioButton->isChecked())
     {
-        tableWidget=ui->tableWidget;
+        tableWidget=ui->verticalTableWidget;
         toolList = GetToolsCylinderVertical();
     }
-    else if(ui->radioButton_2->isChecked())
+    else if(ui->horizontalRadioButton->isChecked())
     {
-        tableWidget=ui->tableWidget_2;
+        tableWidget=ui->horizontalTableWidget;
         toolList = GetToolsCylinderHorizontal();
     }
     else
     {
-        tableWidget=ui->tableWidget;
+        tableWidget=ui->verticalTableWidget;
         toolList = GetToolsCylinderVertical();
     }
 
@@ -128,7 +150,7 @@ void MainWindow::FillTableTool()
 
 void MainWindow::FillTableMaterial()
 {
-    QTableWidget * tableWidget = ui->tableWidget_3;
+    QTableWidget * tableWidget = ui->materialTableWidget;
     QList<material> materialList=GetMaterial();
 
     QStringList labelsForHeader;
@@ -265,4 +287,84 @@ QList<tool> MainWindow::GetToolsCylinderHorizontal()
     toolList.append(t13);
     toolList.append(t14);
     return toolList;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    int code =0;
+
+
+    QString typ_stanok, model_stanok;
+    int P_stanok, Lpx_stanok;
+    //заготовка
+    QString mat_zag;
+    int cod_zag, HB_zag;
+    //обработка
+    bool usadka;
+    QString  mat_sozh;
+    int  cod_sozh;
+    //отверстие
+    double Ra;
+    int D0, D, L, Kvalitet, HiOtkl, LowOtkl;
+    //выходной текст
+    QString TxtFileName; //результаты
+
+    //ввод параметров станка
+
+    if (ui->verticalRadioButton->isChecked()) {
+        typ_stanok='вертикальный';
+        model_stanok=ui->verticalTableWidget->item(ui->verticalTableWidget->currentRow(),0)->text();
+        P_stanok=ui->verticalTableWidget->item(ui->verticalTableWidget->currentRow(),1)->text().toInt();
+        Lpx_stanok=ui->verticalTableWidget->item(ui->verticalTableWidget->currentRow(),2)->text().toInt();
+    } else if(ui->horizontalRadioButton->isChecked())
+    {
+        typ_stanok='горизонтальный';
+
+        model_stanok=ui->horizontalTableWidget->item(ui->verticalTableWidget->currentRow(),0)->text();
+        P_stanok=ui->horizontalTableWidget->item(ui->verticalTableWidget->currentRow(),1)->text().toInt();
+        Lpx_stanok=ui->horizontalTableWidget->item(ui->verticalTableWidget->currentRow(),2)->text().toInt();
+    };
+
+    //ввод параметров заготовки
+    mat_zag=ui->materialTableWidget->item(ui->materialTableWidget->currentRow(),0)->text();
+    cod_zag=ui->materialTableWidget->currentRow();
+    HB_zag=ui->materialSpinBox->value();
+    //ввод параметров обработки
+    if (ui->usadkaRadioButton->isChecked())
+        usadka=true;
+    else
+        usadka=false;
+
+    mat_sozh=hbString;
+    cod_sozh=indexHBRadioButton;
+    //ввод параметров отверстия
+    D0=ui->d0SpinBox->value();
+    D=ui->d_spinBox->value();
+    L=ui->l_spinBox->value();
+    Kvalitet=ui->kval_spinBox->value();
+    HiOtkl=ui->hi_spinBox->value();
+    LowOtkl=ui->low_spinBox->value();
+    Ra=(double)ui->ra_spinBox->value();
+    //      val(Edit_Ra.Text,Ra,code);
+    //    //запуск процедуры расчёта
+    //      Protyagka_Tzil(
+    //        //станок
+    //          typ_stanok, model_stanok, P_stanok, Lpx_stanok,
+    //        //заготовка
+    //          mat_zag, cod_zag, HB_zag,
+    //        //обработка
+    //          usadka, mat_sozh, cod_sozh,
+    //        //отверстие
+    //          Ra, D0, D, L, Kvalitet, HiOtkl, LowOtkl,
+    //        //выходной текст
+    //          TxtFileName);
+
+}
+
+void MainWindow::slotRadioToggled(bool)
+{
+    QRadioButton * rb = qobject_cast<QRadioButton*>(sender());
+    if (!rb) return;
+    hbString = rb->text();
+    indexHBRadioButton=listHBRadioButton.indexOf(rb);
 }

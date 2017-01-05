@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include<QHeaderView>
+#include <QRadioButton>
 struct tool
 {
     QString type;
@@ -30,6 +31,9 @@ private slots:
     void TestSlot();
     void Cylinder();
     void SwitchTable(bool);
+    void on_pushButton_clicked();
+    void slotRadioToggled(bool);
+
 private:
     Ui::MainWindow *ui;
     void FillTableTool();
@@ -37,7 +41,9 @@ private:
     void FillTableCylinderHorizontal();
     QList<tool> GetToolsCylinderVertical();
     QList<material> GetMaterial();
-
+    QString hbString;
+    QList<QRadioButton*> listHBRadioButton;
+    int indexHBRadioButton;
     QList<tool> GetToolsCylinderHorizontal();
 
 };
