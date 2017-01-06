@@ -289,7 +289,7 @@ QList<tool> MainWindow::GetToolsCylinderHorizontal()
     return toolList;
 }
 
-void MainWindow::WriteFile(QString string)
+void MainWindow::WriteFile(QString nameFile, QString string)
 {
     QString newString = string+"\n";
 
@@ -358,19 +358,19 @@ void MainWindow::on_pushButton_clicked()
     HiOtkl=ui->hi_spinBox->value();
     LowOtkl=ui->low_spinBox->value();
     Ra=(double)ui->ra_spinBox->value();
-    //      val(Edit_Ra.Text,Ra,code);
-    //    //запуск процедуры расчёта
-    //      Protyagka_Tzil(
-    //        //станок
-    //          typ_stanok, model_stanok, P_stanok, Lpx_stanok,
-    //        //заготовка
-    //          mat_zag, cod_zag, HB_zag,
-    //        //обработка
-    //          usadka, mat_sozh, cod_sozh,
-    //        //отверстие
-    //          Ra, D0, D, L, Kvalitet, HiOtkl, LowOtkl,
-    //        //выходной текст
-    //          TxtFileName);
+    //val(Edit_Ra.Text,Ra,code);
+    //запуск процедуры расчёта
+    Protyagka_Tzil(
+                //станок
+                typ_stanok, model_stanok, P_stanok, Lpx_stanok,
+                //заготовка
+                mat_zag, cod_zag, HB_zag,
+                //обработка
+                usadka, mat_sozh, cod_sozh,
+                //отверстие
+                Ra, D0, D, L, Kvalitet, HiOtkl, LowOtkl,
+                //выходной текст
+                TxtFileName);
 
 }
 
@@ -380,4 +380,38 @@ void MainWindow::slotRadioToggled(bool)
     if (!rb) return;
     hbString = rb->text();
     indexHBRadioButton=listHBRadioButton.indexOf(rb);
+}
+
+void MainWindow::Protyagka_Tzil(
+QString typ_stanok_, QString model_stanok_, int P_stanok_, int Lpx_stanok_, QString mat_zag_, int cod_zag_, int HB_zag_,
+bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int L_, int Kvalitet_, int HiOtkl_, int LowOtkl_, QString nameFile
+)
+{
+ QString F;
+ int n, i, j, g, code, type_xvostovik, gamma_rezhzub, Zper, Zkal,
+  gamma_kalzub, Zmax_o, Zmax_g, var_opt_o, shema, nk, komplekt,komplekt1,komplekt2;
+ QString temp,temp1,temp2,temp3,temp4,temp5, temp6, forma_rezhzub, forma_kalzub;
+ double Lnp_o, Lnp_g, Ldop_d, Ldop_st_o, Ldop_st_g, l1,lp_o,lp_g,lk_o,lk_g,lz, dx,Fx, Px,P1_o,P1_g,Pp_o,Pp_g, shag_zub, Zmax_zub,b_o,h_kan, Trezh_o, Trezh_g, Tkal, Dzat_o, Dzat_g;
+ double tp_o, tp_g, tk_o, tk_g, K_o,K_g, Szk_o,Szk_g, Sz, q;
+ double hkp_o,rsp_o,bp_o,Rdp_o,Fkp_o;
+ double hkp_g,rsp_g,bp_g,Rdp_g,Fkp_g;
+ double hkk_o,rsk_o,bk_o,Rdk_o,Fkk_o;
+ double hkk_g,rsk_g,bk_g,Rdk_g,Fkk_g;
+ double hkk,rsk,bk,Rdk,Fkk;
+  QVariant Szk;
+  bool Error_o, Error_g;
+ double dzp_o[40][1000], Perimetr_o[40][1000], P_tek_o[40][1000], P_all_o[40][1000];
+ double Szp_o[40], q_o[40];
+ double  dzp_g[5][40][1000], Perimetr_g[5][40][1000], P_tek_g[5][40][1000], P_all_g[5][40][1000];
+ double  Szp_g[5][40], q_g[5][40];
+ double A,Aper_o, Aper_g, Totv, Tizg, delta, Dmax, Dkal, max, min;
+ int  Zp_o[40];
+ int  Zp_g[5][40], kol_grupp[5][40];
+ int  var_opt_g[5];
+ int Zk_o, Zk_g;
+ double d,b_g,h_vik,lambda_n,lambda_vik,l_n,l_vik,a_vik,R_vik,R_krug;
+ int n_vik;
+ double d_per,b_g_per,h_vik_per,lambda_n_per,lambda_vik_per,l_n_per,l_vik_per,a_vik_per,
+  R_vik_per,R_krug_per;
+ int  n_vik_per;
 }

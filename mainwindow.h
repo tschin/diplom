@@ -2,10 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include<QHeaderView>
+#include <QHeaderView>
 #include <QRadioButton>
 #include <QFile>
 #include <QDir>
+#include <QVariant>
 struct tool
 {
     QString type;
@@ -47,8 +48,9 @@ private:
     QList<QRadioButton*> listHBRadioButton;
     int indexHBRadioButton;
     QList<tool> GetToolsCylinderHorizontal();
-    void WriteFile (QString string);
+    void WriteFile (QString nameFile, QString string);
 
+    void Protyagka_Tzil(QString typ_stanok_, QString model_stanok_, int P_stanok_, int Lpx_stanok_, QString mat_zag_, int cod_zag_, int HB_zag_, bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int L_, int Kvalitet_, int HiOtkl_, int LowOtkl_, QString nameFile);
 };
 
 #endif // MAINWINDOW_H
