@@ -358,7 +358,7 @@ void MainWindow::on_pushButton_clicked()
     HiOtkl=ui->hi_spinBox->value();
     LowOtkl=ui->low_spinBox->value();
     Ra=(double)ui->ra_spinBox->value();
-    //val(Edit_Ra.Text,Ra,code);
+    ////Val(Edit_Ra.Text,Ra,code);
     //запуск процедуры расчёта
     Protyagka_Tzil(
                 //станок
@@ -400,18 +400,735 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
  double hkk,rsk,bk,Rdk,Fkk;
   QVariant Szk;
   bool Error_o, Error_g;
- double dzp_o[40][1000], Perimetr_o[40][1000], P_tek_o[40][1000], P_all_o[40][1000];
- double Szp_o[40], q_o[40];
- double  dzp_g[5][40][1000], Perimetr_g[5][40][1000], P_tek_g[5][40][1000], P_all_g[5][40][1000];
- double  Szp_g[5][40], q_g[5][40];
+ double dzp_o[41//Pril_Zadnapr1001], Perimetr_o[41//Pril_Zadnapr1001], P_tek_o[41//Pril_Zadnapr1001], P_all_o[41//Pril_Zadnapr1001];
+ double Szp_o[41], q_o[41];
+ double  dzp_g[6//Pril_Zadnapr41//Pril_Zadnapr1001], Perimetr_g[6//Pril_Zadnapr41//Pril_Zadnapr1001], P_tek_g[6//Pril_Zadnapr41//Pril_Zadnapr1001], P_all_g[6//Pril_Zadnapr41//Pril_Zadnapr1001];
+ double  Szp_g[6//Pril_Zadnapr41], q_g[6//Pril_Zadnapr41];
  double A,Aper_o, Aper_g, Totv, Tizg, delta, Dmax, Dkal, max, min;
- int  Zp_o[40];
- int  Zp_g[5][40], kol_grupp[5][40];
- int  var_opt_g[5];
+ int  Zp_o[41];
+ int  Zp_g[6//Pril_Zadnapr41], kol_grupp[6//Pril_Zadnapr41];
+ int  var_opt_g[6];
  int Zk_o, Zk_g;
  double d,b_g,h_vik,lambda_n,lambda_vik,l_n,l_vik,a_vik,R_vik,R_krug;
  int n_vik;
  double d_per,b_g_per,h_vik_per,lambda_n_per,lambda_vik_per,l_n_per,l_vik_per,a_vik_per,
   R_vik_per,R_krug_per;
  int  n_vik_per;
+
+ //int  n_vik_per;
+
+ //создание файла данных
+  QString TxtFileName_="Протяжка цилиндрическая.txt";
+   F=TxtFileName_;
+
+ //вывод исходных данных
+   WriteFile(F, "ИСХОДНЫЕ ДАННЫЕ ДЛЯ ПРОЕКТИРОВАНИЯ ЦИЛИНДРИЧЕСКОЙ ПРОТЯЖКИ");
+   WriteFile(F, "");
+   WriteFile(F, "Диаметр предварительно обработанного отверстия: D0= "+QString::number(D0_)+" мм");
+   WriteFile(F, "Диаметр отверстия, получаемого протягиванием: D= "+QString::number(D_)+" мм"+" (+"+QString::number(HiOtkl_)+"; -"+QString::number(LowOtkl_)+" мкм)");
+   WriteFile(F, "Длина отверстия, получаемого протягиванием: L= "+QString::number(L_)+" мм");
+
+   WriteFile(F, "Квалитет отверстия: "+QString::number(Kvalitet_)+";  шероховатость отверстия: Ra= "+temp+" мкм");
+   WriteFile(F, "Материал заготовки: "+mat_zag_+";  твёрдость НВ= "+QString::number(HB_zag_));
+   WriteFile(F, "Тип протяжного станка: "+typ_stanok_+";  модель станка: "+model_stanok_);
+   WriteFile(F, "Номинальная тяговая сила протяжного станка: Pc= "+QString::number(P_stanok_)+" Н");
+   WriteFile(F, "Максимальная длина хода ползуна протяжного станка: Lpx= "+QString::number(Lpx_stanok_)+" мм");
+
+   if (usadka)
+       temp="усадкой";
+   else
+       temp="разбиением";
+
+   WriteFile(F, "Процесс резания сопровождается: "+temp+" отверстия");
+   WriteFile(F, "Использование СОЖ: "+mat_sozh_);
+   WriteFile(F, "");
+ //начало расчёта
+   WriteFile(F, "");
+   WriteFile(F, "РАССЧИТАННЫЕ ПАРАМЕТРЫ ЦИЛИНДРИЧЕСКОЙ ПРОТЯЖКИ");
+   WriteFile(F, "");
+
+   ////Pril_Hvostovik(D0_, type_xvostovik, dx, Fx);
+
+   l1=280+L_;
+
+   //Pril_Zadnapr(D_, lz);
+
+  ////str(dx:4:1,temp);
+   WriteFile(F, "Выбираем хвостовик "+QString::number(type_xvostovik)+" типа с диаметром d1= "+temp+" мм (см. приложение)");
+   //str(l1:5:1,temp);
+   WriteFile(F, "Расстояние от торца хвостовика до первого зуба: l1= "+temp+" мм");
+   //str(Fx:5:1,temp);
+   WriteFile(F, "Площадь сечения хвостовика, определяющая его прочность: Fx= "+temp+" мм^2");
+ //выбор материала протяжки
+ if (D0_<=14)
+ {
+   Px=Fx*250; //для хвостовика из констр. стали
+   if (Px>0.8*P_stanok_)
+     WriteFile(F, "Материал хвостовика: сталь 40X по ГОСТ 4543-71;  рабочей части: сталь Р18 по ГОСТ 19265-73");
+   else {
+     WriteFile(F, "Изготавливаем цельную протяжку из быстрорежущей стали Р18 по ГОСТ 19265-73");
+     Px=Fx*300;
+   }
+ }
+ else {
+   Px=Fx*250; //для хвостовика из констр. стали
+   WriteFile(F, "Материал хвостовика: сталь 40X по ГОСТ 4543-71;  рабочей части: сталь Р18 по ГОСТ 19265-73");
+ };
+ //выбор углов и формы зубьев
+   //Pril_Ugol(cod_zag_, HB_zag_, forma_rezhzub, gamma_rezhzub, forma_kalzub, gamma_kalzub);
+ //расчёт допусков и усадки (разбиения)
+   A=D_-D0_;
+   Totv=0.001*(Hiotkl_-Lowotkl_);
+   if (Totv<=0.025) delta=0;
+   if ((Totv>0.025) && (Totv<0.03)) delta=0.002;
+   if ((Totv>=0.03)&&(Totv<0.035)) delta=0.004;
+   if ((Totv>=0.035)&&(Totv<0.05)) delta=0.005;
+   if ((Totv>=0.05)&&(Totv<0.1)) delta=0.01;
+   if ((Totv>=0.1)&&(Totv<0.17)) delta=0.02;
+   if ((Totv>=0.17)&&(Totv<0.29)) delta=0.03;
+   if ((Totv>=0.29)&&(Totv<=0.34)) delta=0.04;
+   if (Totv>0.34) delta=0.05;
+   Dmax=D_+0.001*Hiotkl_;
+   Tizg=Totv/5;
+   if (!usadka) Dkal=Dmax-2*delta;
+   else Dkal=Dmax+2*delta;
+ //
+ //расчёт зубьев по одинарной схеме резания
+ //
+   shag_zub=1.7*sqrt(L_);
+  // Pril_Kanavka(shag_zub, tp_o,hkp_o,rsp_o,bp_o,Rdp_o,Fkp_o);
+   P1_o=0.25*3.14*400*pow((D0_-2*hkp_o),2);
+   if ((Px<=P1_o)&&(Px<=0.8*P_stanok_)) Pp_o=Px;
+   if ((P1_o<=Px)&&(P1_o<=0.8*P_stanok_)) Pp_o=P1_o;
+   if ((0.8*P_stanok_<=P1_o)&&(0.8*P_stanok_<=Px)) Pp_o=0.8*P_stanok_;
+   Zmax_zub=int(L_/tp_o+1);
+  ////str(Zmax_zub:3:0,temp);
+   Zmax_o=temp.toInt();
+   if ((cod_zag_==35)||(cod_zag_==36)||(cod_zag_==37)||(cod_zag_==38)
+    ||(cod_zag_=39)||(cod_zag_=40)) K_o=2.5;
+   else K_o=3.5;
+   Szk=Fkp_o/(K_o*L_);
+  ////str(Szk:2:2, temp);
+   //Val(temp, Szk_o, code);
+ //расчёт вариантов диаметров режущих зубьев
+   for (int i=1; i<=40; i++) {
+     Szp_o[i]=0;
+     q_o[i]=0;
+     for (int j=1; j<=1000; j++){
+       dzp_o[i//Pril_Zadnaprj]=0;
+       Perimetr_o[i//Pril_Zadnaprj]=0;
+       P_tek_o[i//Pril_Zadnaprj]=0;
+       P_all_o[i//Pril_Zadnaprj]=0;
+     }
+   }
+   Szp_o[1]=0.01;
+   for (int i=2; i<=40; i++)
+        Szp_o[i]=Szp_o[i-1]+0.01;
+   for (int i=1; i<=40; i++){
+     Sz=Szp_o[i];
+
+    // Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+
+     q_o[i]=q*1.2;
+     dzp_o[i//Pril_Zadnapr1]=D0_;
+     Perimetr_o[i//Pril_Zadnapr1]=3.1416*dzp_o[i//Pril_Zadnapr1];
+     P_tek_o[i//Pril_Zadnapr1]=q_o[i]*Perimetr_o[i//Pril_Zadnapr1];
+     P_all_o[i//Pril_Zadnapr1]=P_tek_o[i//Pril_Zadnapr1];
+     int j=1;
+     while (dzp_o[i//Pril_Zadnaprj]<Dkal-2*Szp_o[i]) {
+         j=j+1;
+         dzp_o[i//Pril_Zadnaprj]=dzp_o[i//Pril_Zadnaprj-1]+2*Szp_o[i];
+                 Perimetr_o[i//Pril_Zadnaprj]=3.1416*dzp_o[i//Pril_Zadnaprj];
+                 P_tek_o[i//Pril_Zadnaprj]=Perimetr_o[i//Pril_Zadnaprj]*q_o[i];
+                 if (j<=Zmax_o)
+                 P_all_o[i//Pril_Zadnaprj]=P_all_o[i//Pril_Zadnaprj-1]+P_tek_o[i//Pril_Zadnaprj];
+                 else
+                 P_all_o[i//Pril_Zadnaprj]=P_all_o[i//Pril_Zadnaprj-1]+P_tek_o[i//Pril_Zadnaprj]-P_tek_o[i//Pril_Zadnaprj-Zmax_o];
+                 Zp_o[i]=j;
+    }
+  }
+   i=1;  var_opt_o=0;
+   while (Szp_o[i]<=Szk_o) {
+     max=P_all_o[i//Pril_Zadnapr1];
+     for (int j=2; j<=Zp_o[i]; j++) {
+       if (P_all_o[i//Pril_Zadnaprj]>=max)
+           max=P_all_o[i//Pril_Zadnaprj];
+    }
+     if (max<=Pp_o)
+     var_opt_o=i;
+     i=i+1;
+  }
+ //расчёт стружкоделительных канавок
+   Sz=Szp_o[var_opt_o];
+   //Pril_Struzhka(Sz,hkp_o,D_, b_o);
+   nk=round(3.1416*D_/b_o);
+   if (nk %2!=0)
+                   nk=nk+1;
+   h_kan=5*Sz;
+ //расчёт переходных и калибрующих зубьев
+   //Aper_o=(Dkal-dzp_o[var_opt_o,Zp_o[var_opt_o]])/2;
+   Zper=2; Zkal=4;
+   if (Ra_<=20){Zper=3; Zkal=5;}
+   if (Ra_<=2.5){Zper=5; Zkal=6;}
+   if (Ra_<=1.25){Zper=6; Zkal=7;}
+   Sz=Aper_o/Zper;
+   //Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+   q=q*1.2;
+   for (int i=1; i<=Zper; i++) {
+     dzp_o[var_opt_o//Pril_ZadnaprZp_o[var_opt_o]+i]=dzp_o[var_opt_o,Zp_o[var_opt_o]+i-1]+2*Aper_o/Zper;
+     Perimetr_o[var_opt_o,Zp_o[var_opt_o]+i]=3.1416*dzp_o[var_opt_o,Zp_o[var_opt_o]+i];
+     P_tek_o[var_opt_o,Zp_o[var_opt_o]+i]=Perimetr_o[var_opt_o,Zp_o[var_opt_o]+i]*q;
+  }
+   lp_o=tp_o*(Zp_o[var_opt_o]+Zper-1);
+   Trezh_o=0.3*Szp_o[var_opt_o];
+   if (Trezh_o>0.02) Trezh_o=0.02;
+   Sz=0.01;
+   Pril_UdNagruzka(Sz,gamma_kalzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+   q=q*1.2;
+   for (int i=1; i<=Zkal; i++) {
+     dzp_o[var_opt_o,Zp_o[var_opt_o]+i+Zper]=dzp_o[var_opt_o,Zp_o[var_opt_o]+i-1+Zper];
+     Perimetr_o[var_opt_o,Zp_o[var_opt_o]+i+Zper]=3.1416*dzp_o[var_opt_o,Zp_o[var_opt_o]+i+Zper];
+     P_tek_o[var_opt_o,Zp_o[var_opt_o]+i+Zper]=q*Perimetr_o[var_opt_o,Zp_o[var_opt_o]+i+Zper];
+  }
+   shag_zub=tp_o*2/3;
+   Pril_Kanavka(shag_zub, tk_o,hkk_o,rsk_o,bk_o,Rdk_o,Fkk_o);
+   lk_o=tk_o*Zkal;
+   Lnp_o=l1+lp_o+lk_o+lz;
+   Ldop_d=40*D0_;
+   Ldop_st_o=lp_o+lk_o+lz+L_;
+   Dzat_o=(D0_-hkp_o)*sin(degtorad(45))/sin(degtorad(gamma_rezhzub));
+ //
+ //расчёт зубьев по групповой схеме резания
+ //
+   shag_zub=2*sqrt(L_);
+   Pril_Kanavka(shag_zub, tp_g,hkp_g,rsp_g,bp_g,Rdp_g,Fkp_g);
+   P1_g=0.25*3.14*400*sqr(D0_-2*hkp_g);
+   if ((Px<=P1_g)&&(Px<=0.8*P_stanok_)) Pp_g=Px;
+   if ((P1_g<=Px)&&(P1_g<=0.8*P_stanok_)) Pp_g=P1_g;
+   if ((0.8*P_stanok_<=P1_g)&&(0.8*P_stanok_<=Px)) Pp_g=0.8*P_stanok_;
+   Zmax_zub=int(L_/tp_g+1);
+   //str(Zmax_zub:3:0,temp);
+   Zmax_g=strtoint(temp);
+   if ((cod_zag_=35)||(cod_zag_=36)||(cod_zag_=37)||(cod_zag_=38)
+    ||(cod_zag_=39)||(cod_zag_=40)) K_g=2;
+             else K_g=3;
+   Szk=Fkp_g/(K_g*L_);
+  ////str(Szk:2:2, temp);
+  // //Val(temp, Szk_g, code);
+ //расчёт вариантов диаметров режущих зубьев
+   for (int n=2; n<=5; n++) {
+     for (int i=1; i<=40; i++) {
+       Szp_g[n,i]=0;
+       q_g[n,i]=0;
+       kol_grupp[n,i]=0;
+       for (int j=1; j<=1000; j++) {
+         dzp_g[n,i,j]=0;
+         Perimetr_g[n,i,j]=0;
+         P_tek_g[n,i,j]=0;
+         P_all_g[n,i,j]=0;
+      }
+    }
+  }
+ //расчёт при числе зубьев в группе = 2
+   n=2;
+     Szp_g[n,1]=0.01;
+     for (int i=2; i<=40;i++)
+                 Szp_g[n,i]=Szp_g[n,i-1]+0.01;
+     for (int i=1; i<=40; i++) {
+       dzp_g[n,i,1]=D0_;
+       Perimetr_g[n,i,1]=3.1416*dzp_g[n,i,1];
+       Sz=Szp_g[n,1];
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       P_tek_g[n,i,1]=q*Perimetr_g[n,i,1];
+       P_all_g[n,i,1]=P_tek_g[n,i,1];
+       Sz=Szp_g[n,i];
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       q_g[n,i]=q;
+       j=1; kol_grupp[n,i]=0;
+       while (dzp_g[n,i,j]<Dkal-2*Szp_g[n,i]) {
+         j=j+1;
+           dzp_g[n,i,j]=dzp_g[n,i,j-1]+2*Szp_g[n,i];
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q_g[n,i];
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+         j=j+1;
+           if (Szp_g[n,i]<=0.04) dzp_g[n,i,j]=dzp_g[n,i,j-1]-0.01;
+                   else dzp_g[n,i,j]=dzp_g[n,i,j-1]-0.02;
+           Sz=Szp_g[n,i]-0.01;
+           Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q;
+           if (j<=Zmax_g)
+                   P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+           kol_grupp[n,i]=kol_grupp[n,i]+1;
+      }
+       Zp_g[n,i]=kol_grupp[n,i]*n+1;
+    }
+ //расчёт при числе зубьев в группе = 3
+   n=3;
+     Szp_g[n,1]=0.01;
+     for (int i=2; i<=40; i++) Szp_g[n,i]=Szp_g[n,i-1]+0.01;
+     for (int i=1; i<=40;i++) {
+       dzp_g[n,i,1]=D0_;
+       Perimetr_g[n,i,1]=3.1416*dzp_g[n,i,1];
+       Sz=Szp_g[n,1];
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       P_tek_g[n,i,1]=q*Perimetr_g[n,i,1];
+       P_all_g[n,i,1]=P_tek_g[n,i,1];
+       Sz=Szp_g[n,i];
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       q_g[n,i]=q;
+       j=1; kol_grupp[n,i]=0;
+       while (dzp_g[n,i,j]<Dkal-2*Szp_g[n,i]) {
+         j=j+1;
+           dzp_g[n,i,j]=dzp_g[n,i,j-1]+2*Szp_g[n,i];
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q_g[n,i];
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+         j=j+1;
+           dzp_g[n,i,j]=dzp_g[n,i,j-1];
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q_g[n,i];
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+         j=j+1;
+           if (Szp_g[n,i]<=0.04) dzp_g[n,i,j]=dzp_g[n,i,j-1]-0.01;
+                   else dzp_g[n,i,j]=dzp_g[n,i,j-1]-0.02;
+           Sz=Szp_g[n,i]-0.01;
+           Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q;
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+           kol_grupp[n,i]=kol_grupp[n,i]+1;
+      }
+       Zp_g[n,i]=kol_grupp[n,i]*n+1;
+    }
+ //расчёт при числе зубьев в группе = 4
+   n=4;
+     Szp_g[n,1]=0.01;
+     for (int i=2; i<=40; i++) Szp_g[n,i]=Szp_g[n,i-1]+0.01;
+     for (int i=1; i<=40; i++) {
+       dzp_g[n,i,1]=D0_;
+       Perimetr_g[n,i,1]=3.1416*dzp_g[n,i,1];
+       Sz=Szp_g[n,1];
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       P_tek_g[n,i,1]=q*Perimetr_g[n,i,1];
+       P_all_g[n,i,1]=P_tek_g[n,i,1];
+       Sz=Szp_g[n,i];
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       q_g[n,i]=q;
+       j=1; kol_grupp[n,i]=0;
+       while (dzp_g[n,i,j]<Dkal-2*Szp_g[n,i]) {
+         j=j+1;
+           dzp_g[n,i,j]=dzp_g[n,i,j-1]+2*Szp_g[n,i];
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q_g[n,i];
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+         j=j+1;
+           dzp_g[n,i,j]=dzp_g[n,i,j-1];
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q_g[n,i];
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+         j=j+1;
+           dzp_g[n,i,j]=dzp_g[n,i,j-1];
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q_g[n,i];
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+         j=j+1;
+           if (Szp_g[n,i]<=0.04) dzp_g[n,i,j]=dzp_g[n,i,j-1]-0.01;
+                   else dzp_g[n,i,j]=dzp_g[n,i,j-1]-0.02;
+           Sz=Szp_g[n,i]-0.01;
+           Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q;
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+           kol_grupp[n,i]=kol_grupp[n,i]+1;
+      }
+       Zp_g[n,i]=kol_grupp[n,i]*n+1;
+    }
+ //расчёт при числе зубьев в группе = 5
+   n=5;
+     Szp_g[n,1]=0.01;
+     for (int i=2; i<=40; i++) Szp_g[n,i]=Szp_g[n,i-1]+0.01;
+     for (int i=1; i<=40; i++) {
+       dzp_g[n,i,1]=D0_;
+       Perimetr_g[n,i,1]=3.1416*dzp_g[n,i,1];
+       Sz=Szp_g[n,1];
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       P_tek_g[n,i,1]=q*Perimetr_g[n,i,1];
+       P_all_g[n,i,1]=P_tek_g[n,i,1];
+       Sz=Szp_g[n,i];
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       q_g[n,i]=q;
+       j=1; kol_grupp[n,i]=0;
+       while (dzp_g[n,i,j]<Dkal-2*Szp_g[n,i]) {
+         j=j+1;
+           dzp_g[n,i,j]=dzp_g[n,i,j-1]+2*Szp_g[n,i];
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q_g[n,i];
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+         j=j+1;
+           dzp_g[n,i,j]=dzp_g[n,i,j-1];
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q_g[n,i];
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+         j=j+1;
+           dzp_g[n,i,j]=dzp_g[n,i,j-1];
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q_g[n,i];
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+         j=j+1;
+           dzp_g[n,i,j]=dzp_g[n,i,j-1];
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q_g[n,i];
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+         j=j+1;
+           if (Szp_g[n,i]<=0.04) dzp_g[n,i,j]=dzp_g[n,i,j-1]-0.01; else dzp_g[n,i,j]=dzp_g[n,i,j-1]-0.02;
+           Sz=Szp_g[n,i]-0.01;
+           Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+           Perimetr_g[n,i,j]=3.1416*dzp_g[n,i,j]/n;
+           P_tek_g[n,i,j]=Perimetr_g[n,i,j]*q;
+           if (j<=Zmax_g) P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j];
+              else P_all_g[n,i,j]=P_all_g[n,i,j-1]+P_tek_g[n,i,j]-P_tek_g[n,i,j-Zmax_g];
+           kol_grupp[n,i]=kol_grupp[n,i]+1;
+      }
+       Zp_g[n,i]=kol_grupp[n,i]*n+1;
+    }
+ //выбор оптимального варианта
+   for (int n=2; n<=5; n++) var_opt_g[n]=0;
+   for (int n=2; n<=5;n++) {
+     i=1;
+     while (Szp_g[n,i]<=Szk_g) {
+       max=P_all_g[n,i,1];
+       for (int j=2; j<=Zp_g[n,i]; j++) {
+         if (P_all_g[n,i,j]>=max) max=P_all_g[n,i,j];
+      }
+       if (max<=Pp_g) var_opt_g[n]=i;
+       i=i+1;
+    }
+  }
+   n=2; min=Zp_g[n,var_opt_g[n]];
+   for (int i=3; i<=5; i++) {
+     if (min>Zp_g[i//Pril_Zadnaprvar_opt_g[i]]){min=Zp_g[i//Pril_Zadnaprvar_opt_g[i]]; n=i;}
+  }
+ //расчёт выкружек на режущих зубьях
+   Sz=Szp_g[n,var_opt_g[n]];
+   Pril_Struzhka(Sz,hkp_g,D_, b_g);
+   if (n==2) l_n=2*b_g;
+   if (n==3) l_n=2.2*b_g;
+   if (n==4) l_n=3.2*b_g;
+   if (n==5) l_n=4.2*b_g;
+   lambda_n=360*l_n/(3.1416*D_);
+   n_vik=floor(360/lambda_n)+4;
+   if (n_vik % 2!=0) n_vik=n_vik+1;
+   lambda_n=360/n_vik;
+   l_n=(lambda_n/360)*(3.1416*D_);
+   if (n=2) b_g=l_n/2;
+   if (n=3) b_g=l_n/2.2;
+   if (n=4) b_g=l_n/3.2;
+   if (n=5) b_g=l_n/4.2;
+   l_vik=l_n-b_g;
+   lambda_vik=360*l_vik/(3.1416*D_);
+   a_vik=D_*sin(degtorad(lambda_vik/2));
+   h_vik=10*Szp_g[n,var_opt_g[n]];
+   d=h_vik-0.5*D_*(1-cos(degtorad(lambda_vik/2)));
+   R_vik=0.5*d+0.125*a_vik*a_vik/d;
+   R_krug=R_vik*cos(degtorad(35));
+   if (R_krug>=100) R_krug=125;
+   if ((R_krug<100)&&(R_krug>=80)) R_krug=100;
+   if ((R_krug<80)&&(R_krug>=62.5)) R_krug=80;
+   if ((R_krug<62.5)&&(R_krug>=50)) R_krug=62.5;
+   if ((R_krug<50)&&(R_krug>=40)) R_krug=50;
+   if ((R_krug<40)&&(R_krug>=30)) R_krug=40;
+   if ((R_krug<30)&&(R_krug>=25)) R_krug=30;
+   if ((R_krug<25)&&(R_krug>=22.5)) R_krug=25;
+   if ((R_krug<22.5)&&(R_krug>=17.5)) R_krug=22.5;
+   if ((R_krug<17.5)&&(R_krug>=15)) R_krug=17.5;
+   if ((R_krug<15)&&(R_krug>=12.5)) R_krug=15;
+   if ((R_krug<12.5)) R_krug=12.5;
+   R_vik=R_krug/cos(degtorad(35));
+   h_vik=0.5*D_*(1-cos(degtorad(lambda_vik/2)))+R_vik*(1-cos(arcsin(0.5*a_vik/R_vik)));
+ //расчёт выкружек на переходных зубьях
+   Sz=Szp_g[n,var_opt_g[n]];
+   Pril_Struzhka(Sz,hkp_g,D_, b_g_per);
+   l_n_per=1.8*b_g_per;
+   lambda_n_per=360*l_n_per/(3.1416*D_);
+   n_vik_per=floor(360/lambda_n_per)+2;
+   if (n_vik_per % 2!=0) n_vik_per=n_vik_per+1;
+   lambda_n_per=360/n_vik_per;
+   l_n_per=(lambda_n_per/360)*(3.1416*D_);
+   b_g_per=l_n_per/1.8;
+   l_vik_per=l_n_per-b_g_per;
+   lambda_vik_per=360*l_vik_per/(3.1416*D_);
+   a_vik_per=D_*sin(degtorad(lambda_vik_per/2));
+   h_vik_per=6*Szp_g[n,var_opt_g[n]];
+   d_per=h_vik_per-0.5*D_*(1-cos(degtorad(lambda_vik_per/2)));
+   R_vik_per=0.5*d_per+0.125*a_vik_per*a_vik_per/d_per;
+   R_krug_per=R_vik_per*cos(degtorad(35));
+   if (R_krug_per<=12.5) R_krug_per=10;
+   if ((R_krug_per>12.5)&&(R_krug_per<=15)) R_krug_per=12.5;
+   if ((R_krug_per>15)&&(R_krug_per<=17.5)) R_krug_per=15;
+   if ((R_krug_per>17.5)&&(R_krug_per<=22.5)) R_krug_per=17.5;
+   if ((R_krug_per>22.5)&&(R_krug_per<=25)) R_krug_per=22.5;
+   if ((R_krug_per>25)&&(R_krug_per<=30)) R_krug_per=25;
+   if ((R_krug_per>30)&&(R_krug_per<=40)) R_krug_per=30;
+   if ((R_krug_per>40)&&(R_krug_per<=50)) R_krug_per=40;
+   if ((R_krug_per>50)&&(R_krug_per<=62.5)) R_krug_per=50;
+   if ((R_krug_per>62.5)&&(R_krug_per<=80)) R_krug_per=62.5;
+   if ((R_krug_per>80)&&(R_krug_per<=100)) R_krug_per=80;
+   if (R_krug_per>100) R_krug_per=100;
+   R_vik_per=R_krug_per/cos(degtorad(35));
+   h_vik_per=0.5*D_*(1-cos(degtorad(lambda_vik_per/2)))+R_vik_per*(1-cos(arcsin(0.5*a_vik_per/R_vik_per)));
+ //расчёт переходных и калибрующих зубьев
+   Aper_g=(Dkal-dzp_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]])/2;
+   Zper=2; Zkal=4;
+   if (Ra_<=20){Zper=3; Zkal=5;}
+   if (Ra_<=2.5){Zper=5; Zkal=6;}
+   if (Ra_<=1.25){Zper=6; Zkal=7;}
+   Sz=Aper_g/Zper;
+   Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+   for (int i=1; i<=Zper; i++) {
+     dzp_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]+i]=dzp_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]+i-1]+2*Aper_g/Zper;
+     Perimetr_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]+i]=0.6*3.1416*dzp_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]+i];
+     P_tek_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]+i]=Perimetr_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]+i]*q;
+  }
+   lp_g=tp_g*(Zp_g[n,var_opt_g[n]]+Zper-1);
+   Trezh_g=0.2*Szp_g[n,var_opt_g[n]];
+   Sz=0.01;
+   Pril_UdNagruzka(Sz,gamma_kalzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+   for (int i=1; i<=Zkal; i++) {
+     dzp_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]+i+Zper]=dzp_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]+i-1+Zper];
+     Perimetr_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]+i+Zper]=3.1416*dzp_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]+i-1+Zper];
+     P_tek_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]+i+Zper]=q*Perimetr_g[n,var_opt_g[n],Zp_g[n,var_opt_g[n]]+i-1+Zper];
+  }
+   shag_zub=tp_g*2/3;
+   Pril_Kanavka(shag_zub, tk_g,hkk_g,rsk_g,bk_g,Rdk_g,Fkk_g);
+   lk_g=tk_g*Zkal;
+   Lnp_g=l1+lp_g+lk_g+lz;
+   Ldop_d=40*D0_;
+   Ldop_st_g=lp_g+lk_g+lz+L_;
+   Dzat_g=(D0_-hkp_g)*sin(degtorad(45))/sin(degtorad(gamma_rezhzub));
+ //
+ //выбор схемы резания
+ //
+   if (var_opt_o==0) Error_o=true;
+   if ((var_opt_g[2]==0)&&(var_opt_g[3]=0)&&(var_opt_g[4]=0)&&(var_opt_g[5]=0)) Error_g=true;
+   if ((Error_o==false)&&(Error_g==false)&&(lp_o<=lp_g)) shema=0;
+             else shema=1;
+   if ((Error_o==true)&&(Error_g==false)) shema=1;
+   if ((Error_o==false)&&(Error_g==true)) shema=0;
+   if ((Error_o==true)&&(Error_g=true)) shema=-1;
+ //
+ //вывод данных
+ //
+   WriteFile(F, "");
+  if( shema==-1){//без вариантов
+         WriteFile(F, "Тяговая сила данного протяжного станка не может обеспечить обработку отверстия");
+         CloseFile(F); Exit;
+      }
+    if( shema==0){//одинарная схема
+       // //str(tp_o:3:1, temp);
+         WriteFile(F, "Шаг режущих и переходных зубьев: tp= "+temp+" мм (см. приложение)");
+        ////str(hkp_o:3:1, temp1);//str(rsp_o:3:1, temp2);//str(bp_o:3:1, temp3);//str(Rdp_o:3:1, temp4);
+         WriteFile(F, "Параметры стружечных канавок: h= "+temp1+" мм, r= "+temp2+" мм, b= "+temp3+" мм, R= "+temp4+" мм");
+        ////str(tk_o:3:1, temp);
+         WriteFile(F, "Шаг калибрующих зубьев: tk= "+temp+" мм (см. приложение)");
+        ////str(hkk_o:3:1, temp1);//str(rsk_o:3:1, temp2);//str(bk_o:3:1, temp3);//str(Rdk_o:3:1, temp4);
+         WriteFile(F, "Параметры стружечных канавок: h= "+temp1+" мм, r= "+temp2+" мм, b= "+temp3+" мм, R= "+temp4+" мм");
+         WriteFile(F, "");
+         //str(Px:7:1, temp);
+         WriteFile(F, "Наибольшее усилие, допустимое хвостовиком из условий прочности: Рх= "+temp+" Н");
+        ////str(P1_o:7:1, temp);
+         WriteFile(F, "Наибольшее усилие, допустимое прочностью протяжки по первому зубу: Р1= "+temp+" Н");
+        ////str(Pp_o:7:1, temp);
+         WriteFile(F, "Расчётная сила резания min(Px, P1, 0.8*Pc) : Рр= "+temp+" Н");
+         WriteFile(F, "");
+         WriteFile(F, "Расчёт режущих зубьев протяжки ведём по одинарной схеме резания");
+         WriteFile(F, "Число одновременно работающих зубьев: Zmax= "+QString::number(Zmax_o));
+        ////str(Szp_o[var_opt_o]:2:3, temp);
+         WriteFile(F, "Принимаем подачу, допустимую по размещению стружки и усилию резания: Sz= "+temp+" мм");
+         for (int i=1; i<=Zp_o[var_opt_o]; i++) {
+           //str(dzp_o[var_opt_o,i]:4:3, temp1);
+           //str(Perimetr_o[var_opt_o,i]:7:1, temp2);
+           //str(P_tek_o[var_opt_o,i]:7:0, temp3);
+           //str(Trezh_o:2:3, temp);
+           WriteFile(F, "Режущий зуб №"+QString::number(i)+": диаметр dz= "+temp1+"(-"+temp+") мм,  рабочий периметр Пz= "+temp2+" мм,  нагрузка Pz= "+temp3+" Н");
+        }
+         for(int i=Zp_o[var_opt_o]+1; i<=Zp_o[var_opt_o]+Zper;i++) {
+//          //str(dzp_o[var_opt_o,i]:4:3, temp1);
+//          //str(Perimetr_o[var_opt_o,i]:7:1, temp2);
+//          //str(P_tek_o[var_opt_o,i]:7:0, temp3);
+//          //str(Trezh_o:2:3, temp);
+           WriteFile(F, "Переходный зуб №"+QString::number(i)+": диаметр dz= "+temp1+"(-"+temp+") мм,  рабочий периметр Пz= "+temp2+" мм,  нагрузка Pz= "+temp3+" Н");
+        }
+         for (int i=Zp_o[var_opt_o]+Zper+1; i<= Zp_o[var_opt_o]+Zper+Zkal; i++) {
+//          //str(dzp_o[var_opt_o,i]:4:3, temp1);
+//          //str(Perimetr_o[var_opt_o,i]:7:1, temp2);
+//          //str(P_tek_o[var_opt_o,i]:7:0, temp3);
+           if (usadka_==true) Tkal=Tizg+delta;
+           else Tkal=Tizg-delta;
+           //str(Tkal:2:3, temp);
+           WriteFile(F, "Калибрующий зуб №"+QString::number(i)+": диаметр dz= "+temp1+"(-"+temp+") мм,  рабочий периметр Пz= "+temp2+" мм,  нагрузка Pz= "+temp3+" Н");
+        }
+         WriteFile(F, "Всего зубьев: "+QString::number(Zp_o[var_opt_o]+Zper+Zkal)+"; в том числе: режущих - "+QString::number(Zp_o[var_opt_o])+", переходных - "+QString::number(Zper)+", калибрующих - "+QString::number(Zkal));
+         WriteFile(F, "На зубьях №№ 1-"+QString::number(Zp_o[var_opt_o]+Zper)+" в шахматном порядке выполняем стружкоделительные канавки: "+QString::number(nk)+" канавок");
+        ////str(h_kan:2:1, temp);
+         WriteFile(F, "Глубина стружкоделительных канавок: С= "+temp+" мм (см. приложение)");
+         WriteFile(F, "");
+         WriteFile(F, "Передний угол на режущих и переходных зубьях: "+QString::number(gamma_rezhzub)+" градусов,  задний угол: 3 градуса,  форма зуба: "+forma_rezhzub+" (см. приложение)");
+         WriteFile(F, "Передний угол на калибрующих зубьях: "+QString::number(gamma_kalzub)+" градусов,  задний угол: 1 градус,  форма зуба: "+forma_kalzub+" (см. приложение)");
+         WriteFile(F, "Угол правки шлифовального круга для заточки переднего угла : 45 градусов");
+        ////str(Dzat_o:5:2, temp);
+         WriteFile(F, "Наибольший диаметр круга для заточки: Dзат="+temp+" мм");
+         WriteFile(F, "");
+        ////str(lp_o:5:1,temp);
+         WriteFile(F, "Длина режущей и переходной части протяжки: lp= "+temp+" мм");
+        ////str(lk_o:5:1,temp);
+         WriteFile(F, "Длина калибрующей части протяжки: lk= "+temp+" мм");
+         //str(lz:5:1,temp);
+         WriteFile(F, "Длина задней направляющей части протяжки: lz= "+temp+" мм");
+         //str(Lnp_o:5:1,temp);
+         WriteFile(F, "Полная длина протяжки: Lпр= "+temp+" мм");
+         WriteFile(F, "");
+         //str(Ldop_d:6:1,temp);
+         WriteFile(F, "Допустимая длина протяжки из условий жёсткости: L_доп1=40*D0= "+temp+" мм");
+         //str(Ldop_st_o:6:1,temp);
+         WriteFile(F, "Ход ползуна станка необходимый для данной протяжки: L_доп2=lp+lk+lz+L= "+temp+" мм");
+         if ((Ldop_d>=Lnp_o)&&(Ldop_st_o<=Lpx_stanok_)) WriteFile(F, "Все условия ограничения на длину выполняются");
+         if ((Ldop_d<Lnp_o)&&(Ldop_st_o<=Lpx_stanok_)) {
+           komplekt=floor(Lnp_o/Ldop_d)+1;
+           WriteFile(F, "Длина протяжки не проходит по жёсткости, проектируем комплект протяжек из: "+QString::number(komplekt)+" штук");
+        }
+         if ((Ldop_d>=Lnp_o)&&(Ldop_st_o>Lpx_stanok_)){
+           komplekt=floor(Ldop_st_o/Lpx_stanok_)+1;
+           WriteFile(F, "Длина хода ползуна станка не обеспечит работу протяжки, проектируем комплект протяжек из: "+QString::number(komplekt)+" штук");
+        }
+         if ((Ldop_d<Lnp_o)&&(Ldop_st_o>Lpx_stanok_)){
+           komplekt1=floor(Lnp_o/Ldop_d)+1;
+           komplekt2=floor(Ldop_st_o/Lpx_stanok_)+1;
+           if (komplekt1>=komplekt2) komplekt=komplekt1;
+           else komplekt=komplekt2;
+           WriteFile(F, "Длина протяжки не проходит по жёсткости и ходу ползуна, проектируем комплект протяжек из: "+QString::number(komplekt)+" штук");
+        }
+      }
+    if( shema==1){//групповая схема
+         //str(tp_g:3:1, temp);
+         WriteFile(F, "Шаг режущих и переходных зубьев: tp= "+temp+" мм (см. приложение)");
+         //str(hkp_g:3:1, temp1);//str(rsp_g:3:1, temp2);//str(bp_g:3:1, temp3);//str(Rdp_g:3:1, temp4);
+         WriteFile(F, "Параметры стружечных канавок: h= "+temp1+" мм, r= "+temp2+" мм, b= "+temp3+" мм, R= "+temp4+" мм");
+         //str(tk_g:3:1, temp);
+         WriteFile(F, "Шаг калибрующих зубьев: tk= "+temp+" мм (см. приложение)");
+         //str(hkk_g:3:1, temp1);//str(rsk_g:3:1, temp2);//str(bk_g:3:1, temp3);//str(Rdk_g:3:1, temp4);
+         WriteFile(F, "Параметры стружечных канавок: h= "+temp1+" мм, r= "+temp2+" мм, b= "+temp3+" мм, R= "+temp4+" мм");
+         WriteFile(F, "");
+         //str(Px:7:1, temp);
+         WriteFile(F, "Наибольшее усилие, допустимое хвостовиком из условий прочности: Рх= "+temp+" Н");
+         //str(P1_g:7:1, temp);
+         WriteFile(F, "Наибольшее усилие, допустимое прочностью протяжки по первому зубу: Р1= "+temp+" Н");
+         //str(Pp_g:7:1, temp);
+         WriteFile(F, "Расчётная сила резания min(Px, P1, 0.8*Pc) : Рр= "+temp+" Н");
+         WriteFile(F, "");
+         WriteFile(F, "Расчёт режущих зубьев протяжки ведём по групповой схеме резания");
+         WriteFile(F, "Число одновременно работающих зубьев: Zmax= "+QString::number(Zmax_g)+"; число зубьев в группе: nг= "+QString::number(n));
+         //str(Szp_g[n,var_opt_g[n]]:2:3, temp);
+         WriteFile(F, "Принимаем подачу, допустимую по размещению стружки и усилию резания: Sz= "+temp+" мм");
+//        //str(dzp_g[n,var_opt_g[n],1]:4:3, temp1);
+//        //str(Perimetr_g[n,var_opt_g[n],1]:7:1, temp2);
+//        //str(P_tek_g[n,var_opt_g[n],1]:7:0, temp3);
+//        //str(Trezh_g:2:3, temp);
+         WriteFile(F, "Режущий зуб №1: диаметр dz= "+temp1+"(-"+temp+") мм,  рабочий периметр Пz= "+temp2+" мм,  нагрузка Pz= "+temp3+" Н");
+         for (int i=1; i<=kol_grupp[n,var_opt_g[n]]; i++) {
+         WriteFile(F, "Группа "+QString::number(i));
+           for(int j=1; j<=n; j++) {
+//            //str(dzp_g[n,var_opt_g[n],(i-1)*n+j+1]:4:3, temp1);
+//            //str(Perimetr_g[n,var_opt_g[n],(i-1)*n+j+1]:7:1, temp2);
+//            //str(P_tek_g[n,var_opt_g[n],(i-1)*n+j+1]:7:0, temp3);
+//            //str(Trezh_g:2:3, temp);
+             WriteFile(F, "Режущий зуб №"+QString::number((i-1)*n+j+1)+": диаметр dz= "+temp1+"(-"+temp+") мм,  рабочий периметр Пz= "+temp2+" мм,  нагрузка Pz= "+temp3+" Н");
+          }
+        }
+         for (int i=Zp_g[n,var_opt_g[n]]+1; i<=Zp_g[n,var_opt_g[n]]+Zper; i++) {
+//          //str(dzp_g[n,var_opt_g[n],i]:4:3, temp1);
+//          //str(Perimetr_g[n,var_opt_g[n],i]:7:1, temp2);
+//          //str(P_tek_g[n,var_opt_g[n],i]:7:0, temp3);
+//          //str(Trezh_g:2:3, temp);
+           WriteFile(F, "Переходный зуб №"+QString::number(i)+": диаметр dz= "+temp1+"(-"+temp+") мм,  рабочий периметр Пz= "+temp2+" мм,  нагрузка Pz= "+temp3+" Н");
+        }
+         for (int i=Zp_g[n,var_opt_g[n]]+Zper+1; i<=Zp_g[n,var_opt_g[n]]+Zper+Zkal; i++) {
+//          //str(dzp_g[n,var_opt_g[n],i]:4:3, temp1);
+//          //str(Perimetr_g[n,var_opt_g[n],i]:7:1, temp2);
+//          //str(P_tek_g[n,var_opt_g[n],i]:7:0, temp3);
+           if (usadka_==true) Tkal=Tizg+delta; else Tkal=Tizg-delta;
+//          //str(Tkal:2:3, temp);
+           WriteFile(F, "Калибрующий зуб №"+QString::number(i)+": диаметр dz= "+temp1+"(-"+temp+") мм,  рабочий периметр Пz= "+temp2+" мм,  нагрузка Pz= "+temp3+" Н");
+        }
+         WriteFile(F, "Всего зубьев: "+QString::number(Zp_g[n,var_opt_g[n]]+Zper+Zkal)+"; в том числе: режущих - "+QString::number(Zp_g[n,var_opt_g[n]])+", переходных - "+QString::number(Zper)+", калибрующих - "+QString::number(Zkal));
+         WriteFile(F, "На всех режущих зубьях в группах, кроме последнего, в шахматном порядке выполняем выкружки: "+QString::number(n_vik)+" выкруж(ки/ек)");
+        //str(h_vik:3:1, temp1);
+        //str(a_vik:3:1, temp2);
+        //str(R_vik:4:1, temp3);
+         WriteFile(F, "Параметры выкружек: глубина - hв= "+temp1+" мм, ширина - ав= "+temp2+" мм, радиус - Rв= "+temp3+" мм (см. приложение)");
+        //str(2*R_krug:4:1, temp);
+         WriteFile(F, "Диаметр абразивного круга для шлифования выкружек: Dк= "+temp+" мм");
+         WriteFile(F, "На всех переходных зубьях в шахматном порядке выполняем выкружки: "+QString::number(n_vik_per)+" выкруж(ки/ек)");
+        //str(h_vik_per:3:1, temp1);
+        //str(a_vik_per:3:1, temp2);
+        //str(R_vik_per:4:1, temp3);
+         WriteFile(F, "Параметры выкружек: глубина - hв= "+temp1+" мм, ширина - ав= "+temp2+" мм, радиус - Rв= "+temp3+" мм (см. приложение)");
+        //str(2*R_krug_per:4:1, temp);
+         WriteFile(F, "Диаметр абразивного круга для шлифования выкружек: Dк= "+temp+" мм");
+         WriteFile(F, "");
+         WriteFile(F, "Передний угол на режущих и переходных зубьях: "+QString::number(gamma_rezhzub)+" градусов,  задний угол: 3 градуса,  форма зуба: "+forma_rezhzub+" (см. приложение)");
+         WriteFile(F, "Передний угол на калибрующих зубьях: "+QString::number(gamma_kalzub)+" градусов,  задний угол: 1 градус,  форма зуба: "+forma_kalzub+" (см. приложение)");
+         WriteFile(F, "Угол правки шлифовального круга для заточки переднего угла : 45 градусов");
+        //str(Dzat_g:5:2, temp);
+         WriteFile(F, "Наибольший диаметр круга для заточки: Dзат="+temp+" мм");
+         WriteFile(F, "");
+        //str(lp_g:5:1,temp);
+         WriteFile(F, "Длина режущей и переходной части протяжки: lp= "+temp+" мм");
+        //str(lk_g:5:1,temp);
+         WriteFile(F, "Длина калибрующей части протяжки: lk= "+temp+" мм");
+        //str(lz:5:1,temp);
+         WriteFile(F, "Длина задней направляющей части протяжки: lz= "+temp+" мм");
+        //str(Lnp_g:5:1,temp);
+         WriteFile(F, "Полная длина протяжки: Lпр= "+temp+" мм");
+         WriteFile(F, "");
+        //str(Ldop_d:6:1,temp);
+         WriteFile(F, "Допустимая длина протяжки из условий жёсткости: L_доп1=40*D0= "+temp+" мм");
+        //str(Ldop_st_g:6:1,temp);
+         WriteFile(F, "Ход ползуна станка необходимый для данной протяжки: L_доп2=lp+lk+lz+L= "+temp+" мм");
+         if ((Ldop_d>=Lnp_g)&&(Ldop_st_g<=Lpx_stanok_)) WriteFile(F, "Все условия ограничения на длину выполняются");
+         if ((Ldop_d<Lnp_g)&&(Ldop_st_g<=Lpx_stanok_)){
+           komplekt=floor(Lnp_g/Ldop_d)+1;
+           WriteFile(F, "Длина протяжки не проходит по жёсткости, проектируем комплект протяжек из: "+QString::number(komplekt)+" штук");
+        }
+         if ((Ldop_d>=Lnp_g)&&(Ldop_st_g>Lpx_stanok_)){
+           komplekt=floor(Ldop_st_g/Lpx_stanok_)+1;
+           WriteFile(F, "Длина хода ползуна станка не обеспечит работу протяжки, проектируем комплект протяжек из: "+QString::number(komplekt)+" штук");
+        }
+         if ((Ldop_d<Lnp_g)&&(Ldop_st_g>Lpx_stanok_)){
+           komplekt1=floor(Lnp_g/Ldop_d)+1;
+           komplekt2=floor(Ldop_st_g/Lpx_stanok_)+1;
+           if (komplekt1>=komplekt2) komplekt=komplekt1; else komplekt=komplekt2;
+           WriteFile(F, "Длина протяжки не проходит по жёсткости и ходу ползуна, проектируем комплект протяжек из: "+QString::number(komplekt)+" штук");
+        }
+      }
+  }
+ //закрытие файла данных
+
+
+
+
 }
