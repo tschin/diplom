@@ -289,6 +289,19 @@ QList<tool> MainWindow::GetToolsCylinderHorizontal()
     return toolList;
 }
 
+void MainWindow::WriteFile(QString string)
+{
+    QString newString = string+"\n";
+
+    QFile fileOut(QDir::homePath()+"/fileout.txt");
+    if(fileOut.open(QIODevice::Append | QIODevice::Text))
+    {
+        QTextStream writeStream(&fileOut);
+        writeStream << newString;
+        fileOut.close();
+    }
+}
+
 void MainWindow::on_pushButton_clicked()
 {
     int code =0;

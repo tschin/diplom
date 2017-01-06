@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include<QHeaderView>
 #include <QRadioButton>
+#include <QFile>
+#include <QDir>
 struct tool
 {
     QString type;
@@ -45,6 +47,7 @@ private:
     QList<QRadioButton*> listHBRadioButton;
     int indexHBRadioButton;
     QList<tool> GetToolsCylinderHorizontal();
+    void WriteFile (QString string);
 
 };
 
