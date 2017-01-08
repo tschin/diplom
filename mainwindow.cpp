@@ -999,28 +999,35 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
            WriteFile(F, "Переходный зуб №"+QString::number(i)+": диаметр dz= "+temp1+"(-"+temp+") мм,  рабочий периметр Пz= "+temp2+" мм,  нагрузка Pz= "+temp3+" Н");
         }
          for (int i=Zp_o[var_opt_o]+Zper+1; i<= Zp_o[var_opt_o]+Zper+Zkal; i++) {
-//          //str(dzp_o[var_opt_o][i]:4:3, temp1);
-//          //str(Perimetr_o[var_opt_o][i]:7:1, temp2);
-//          //str(P_tek_o[var_opt_o][i]:7:0, temp3);
+          temp1 = QString::number(dzp_o[var_opt_o][i]);
+          temp2 = QString::number(Perimetr_o[var_opt_o][i]);
+          temp3 = QString::number(P_tek_o[var_opt_o][i]);
+
            if (usadka_==true) Tkal=Tizg+delta;
            else Tkal=Tizg-delta;
-           //str(Tkal:2:3, temp);
+           temp= QString::number(Tkal);
            WriteFile(F, "Калибрующий зуб №"+QString::number(i)+": диаметр dz= "+temp1+"(-"+temp+") мм,  рабочий периметр Пz= "+temp2+" мм,  нагрузка Pz= "+temp3+" Н");
         }
          WriteFile(F, "Всего зубьев: "+QString::number(Zp_o[var_opt_o]+Zper+Zkal)+"; в том числе: режущих - "+QString::number(Zp_o[var_opt_o])+", переходных - "+QString::number(Zper)+", калибрующих - "+QString::number(Zkal));
          WriteFile(F, "На зубьях №№ 1-"+QString::number(Zp_o[var_opt_o]+Zper)+" в шахматном порядке выполняем стружкоделительные канавки: "+QString::number(nk)+" канавок");
-        ////str(h_kan:2:1, temp);
+         temp = QString::number(h_kan);
+
          WriteFile(F, "Глубина стружкоделительных канавок: С= "+temp+" мм (см. приложение)");
          WriteFile(F, "");
          WriteFile(F, "Передний угол на режущих и переходных зубьях: "+QString::number(gamma_rezhzub)+" градусов,  задний угол: 3 градуса,  форма зуба: "+forma_rezhzub+" (см. приложение)");
          WriteFile(F, "Передний угол на калибрующих зубьях: "+QString::number(gamma_kalzub)+" градусов,  задний угол: 1 градус,  форма зуба: "+forma_kalzub+" (см. приложение)");
          WriteFile(F, "Угол правки шлифовального круга для заточки переднего угла : 45 градусов");
-        ////str(Dzat_o:5:2, temp);
+         temp = QString::number(Dzat_o);
          WriteFile(F, "Наибольший диаметр круга для заточки: Dзат="+temp+" мм");
          WriteFile(F, "");
-        ////str(lp_o:5:1,temp);
+
+
+         temp=QString::number(lp_o);
+
+
          WriteFile(F, "Длина режущей и переходной части протяжки: lp= "+temp+" мм");
-        ////str(lk_o:5:1,temp);
+        //str(lk_o:5:1,temp);
+         temp=QString::number(lk_o);
          WriteFile(F, "Длина калибрующей части протяжки: lk= "+temp+" мм");
          //str(lz:5:1,temp);
          WriteFile(F, "Длина задней направляющей части протяжки: lz= "+temp+" мм");
