@@ -10,23 +10,23 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QMenu * check = new QMenu("Выбор и расчет протяжки",ui->menuBar);
 
-            QAction* cylinder = check->addAction("Цилиндрическая протяжка");
+           QAction* cylinder = check->addAction("Цилиндрическая протяжка");
     connect(cylinder, SIGNAL(triggered(bool)), this, SLOT(Cylinder()));
 
 
-            QAction* facet = check->addAction("Гранная протяжка");
+           QAction* facet = check->addAction("Гранная протяжка");
     connect(facet, SIGNAL(triggered(bool)), this, SLOT(TestSlot()));
 
 
-            QAction* facet_combined = check->addAction("Гранная комбинированная протяжка");
+           QAction* facet_combined = check->addAction("Гранная комбинированная протяжка");
     connect(facet_combined, SIGNAL(triggered(bool)), this, SLOT(TestSlot()));
 
 
-            QAction* keywey = check->addAction("Шпоночная протяжка");
+          QAction* keywey = check->addAction("Шпоночная протяжка");
     connect(keywey, SIGNAL(triggered(bool)), this, SLOT(TestSlot()));
 
 
-            QAction* slotted = check->addAction("Шлицевая протяжка");
+           QAction* slotted = check->addAction("Шлицевая протяжка");
     connect(slotted, SIGNAL(triggered(bool)), this, SLOT(TestSlot()));
     ui->menuBar->addMenu(check);
     connect(ui->verticalRadioButton, SIGNAL(clicked(bool)), this, SLOT(SwitchTable(bool)));
@@ -302,25 +302,282 @@ void MainWindow::WriteFile(QString nameFile, QString string)
     }
 }
 
+void MainWindow::Pril_UdNagruzka(double Sz, int gamma_, int cod_zag__, int HB_zag__, int cod_sozh__, double Ra__, double *q)
+{
+
+    double q_, Kpm,Kpo,Kpk;
+
+    q_= *q;
+
+
+      if ( Sz>=0.4)  {
+        if (gamma_>=20)  q_=751;
+        if (gamma_<20) q_=791;
+        if (gamma_<15) q_=846;
+      }
+      if (( Sz>=0.39) &&(  Sz<0.4))  {
+        if (gamma_>=20) q_=733;
+        if (gamma_<20) q_=771;
+        if (gamma_<15) q_=825;
+      }
+      if ((Sz>=0.38) &&(  Sz<0.39))  {
+         if (gamma_>=20) q_=714;
+         if (gamma_<20) q_=752;
+         if (gamma_<15) q_=805;
+      }
+      if ((  Sz>=0.37) &&(  Sz<0.38))  {
+         if (gamma_>=20) q_=696;
+         if (gamma_<20) q_=733;
+         if (gamma_<15) q_=784;
+      }
+      if ((  Sz>=0.36) &&(  Sz<0.37))  {
+         if (gamma_>=20) q_=678;
+         if (gamma_<20) q_=713;
+         if (gamma_<15) q_=763;
+      }
+      if ((  Sz>=0.35) &&(  Sz<0.36)) {
+         if (gamma_>=20) q_=659;
+         if (gamma_<20) q_=694;
+         if (gamma_<15) q_=743;
+      }
+      if ((  Sz>=0.34) &&(  Sz<0.35)) {
+         if (gamma_>=20) q_=641;
+         if (gamma_<20) q_=675;
+         if (gamma_<15) q_=722;
+      }
+      if ((  Sz>=0.33) &&(  Sz<0.34)) {
+         if (gamma_>=20) q_=623;
+         if (gamma_<20) q_=655;
+         if (gamma_<15) q_=708;
+      }
+      if ((  Sz>=0.32) &&(  Sz<0.33)) {
+         if (gamma_>=20) q_=604;
+         if (gamma_<20) q_=628;
+         if (gamma_<15) q_=687;
+      }
+      if ((  Sz>=0.31) &&(  Sz<0.32)) {
+         if (gamma_>=20) q_=586;
+         if (gamma_<20) q_=617;
+         if (gamma_<15) q_=666;
+      }
+      if ((  Sz>=0.30) &&(  Sz<0.31)) {
+         if (gamma_>=20) q_=567;
+         if (gamma_<20) q_=597;
+         if (gamma_<15) q_=645;
+      }
+      if ((  Sz>=0.29) &&(  Sz<0.30)) {
+         if (gamma_>=20) q_=549;
+         if (gamma_<20) q_=579;
+         if (gamma_<15) q_=624;
+      }
+      if ((  Sz>=0.28) &&(  Sz<0.29)) {
+         if (gamma_>=20) q_=531;
+         if (gamma_<20) q_=559;
+         if (gamma_<15) q_=604;
+      }
+      if ((  Sz>=0.27) &&(  Sz<0.28)) {
+         if (gamma_>=20) q_=512;
+         if (gamma_<20) q_=539;
+         if (gamma_<15) q_=583;
+      }
+      if ((  Sz>=0.26) &&(  Sz<0.27)) {
+         if (gamma_>=20) q_=494;
+         if (gamma_<20) q_=520;
+         if (gamma_<15) q_=562;
+      }
+      if ((  Sz>=0.25) &&(  Sz<0.26)) {
+         if (gamma_>=20) q_=471;
+         if (gamma_<20) q_=501;
+         if (gamma_<15) q_=541;
+      }
+      if ((  Sz>=0.24) &&(  Sz<0.25)) {
+         if (gamma_>=20) q_=453;
+         if (gamma_<20) q_=481;
+         if (gamma_<15) q_=525;
+      }
+      if ((  Sz>=0.23) &&(  Sz<0.24)) {
+         if (gamma_>=20) q_=434;
+         if (gamma_<20) q_=462;
+         if (gamma_<15) q_=504;
+      }
+      if ((  Sz>=0.22) &&(  Sz<0.23)) {
+         if (gamma_>=20) q_=416;
+         if (gamma_<20) q_=443;
+         if (gamma_<15) q_=483;
+      }
+      if ((  Sz>=0.21) &&(  Sz<0.22)) {
+         if (gamma_>=20) q_=398;
+         if (gamma_<20) q_=423;
+         if (gamma_<15) q_=462;
+      }
+      if ((  Sz>=0.20) &&(  Sz<0.21)) {
+         if (gamma_>=20) q_=380;
+         if (gamma_<20) q_=404;
+         if (gamma_<15) q_=433;
+      }
+      if ((  Sz>=0.19) &&(  Sz<0.20)) {
+         if (gamma_>=20) q_=362;
+         if (gamma_<20) q_=385;
+         if (gamma_<15) q_=419;
+      }
+      if ((  Sz>=0.18) &&(  Sz<0.19)) {
+         if (gamma_>=20) q_=343;
+         if (gamma_<20) q_=365;
+         if (gamma_<15) q_=402;
+      }
+      if ((  Sz>=0.17) &&(  Sz<0.18)) {
+         if (gamma_>=20) q_=325;
+         if (gamma_<20) q_=381;
+         if (gamma_<15) q_=446;
+      }
+      if ((  Sz>=0.16) &&(  Sz<0.17)) {
+         if (gamma_>=20) q_=304;
+         if (gamma_<20) q_=327;
+         if (gamma_<15) q_=360;
+      }
+      if ((  Sz>=0.15) &&(  Sz<0.16)) {
+         if (gamma_>=20) q_=286;
+         if (gamma_<20) q_=312;
+         if (gamma_<15) q_=338;
+      }
+      if ((  Sz>=0.14) &&(  Sz<0.15)) {
+         if (gamma_>=20) q_=268;
+         if (gamma_<20) q_=288;
+         if (gamma_<15) q_=320;
+      }
+      if ((  Sz>=0.13) &&(  Sz<0.14)) {
+         if (gamma_>=20) q_=250;
+         if (gamma_<20) q_=269;
+         if (gamma_<15) q_=298;
+      }
+      if ((  Sz>=0.12) &&(  Sz<0.13)) {
+         if (gamma_>=20) q_=232;
+         if (gamma_<20) q_=249;
+         if (gamma_<15) q_=277;
+      }
+      if ((  Sz>=0.11) &&(  Sz<0.12)) {
+         if (gamma_>=20) q_=212;
+         if (gamma_<20) q_=230;
+         if (gamma_<15) q_=258;
+      }
+      if ((  Sz>=0.10) &&(  Sz<0.11)) {
+         if (gamma_>=20) q_=194;
+         if (gamma_<20) q_=212;
+         if (gamma_<15) q_=236;
+      }
+      if ((  Sz>=0.09) &&(  Sz<0.10)) {
+         if (gamma_>=20) q_=176;
+         if (gamma_<20) q_=191;
+         if (gamma_<15) q_=216;
+      }
+      if ((  Sz>=0.08) &&(  Sz<0.09)) {
+         if (gamma_>=20) q_=157;
+         if (gamma_<20) q_=172;
+         if (gamma_<15) q_=195;
+      }
+      if ((  Sz>=0.07) &&(  Sz<0.08)) {
+         if (gamma_>=20) q_=139;
+         if (gamma_<20) q_=153;
+         if (gamma_<15) q_=174;
+      }
+      if ((  Sz>=0.06) &&(  Sz<0.07)) {
+         if (gamma_>=20) q_=121;
+         if (gamma_<20) q_=134;
+         if (gamma_<15) q_=153;
+      }
+      if ((  Sz>=0.05) &&(  Sz<0.06)) {
+         if (gamma_>=20) q_=103;
+         if (gamma_<20) q_=114;
+         if (gamma_<15) q_=132;
+      }
+      if ((  Sz>=0.04) &&(  Sz<0.05)) {
+         if (gamma_>=20) q_=84;
+         if (gamma_<20) q_=95;
+         if (gamma_<15) q_=112;
+      }
+      if ((  Sz>=0.03) &&(  Sz<0.04)) {
+         if (gamma_>=20) q_=67;
+         if (gamma_<20) q_=76;
+         if (gamma_<15) q_=91;
+      }
+      if ((  Sz>=0.02) &&(  Sz<0.03)) {
+         if (gamma_>=20) q_=48;
+         if (gamma_<20) q_=56;
+         if (gamma_<15) q_=70;
+      }
+      if ((  Sz<0.02)) {
+         if (gamma_>=20) q_=30;
+         if (gamma_<20) q_=37;
+         if (gamma_<15) q_=48;
+      }
+      Kpm=1.0;
+
+
+      if(cod_zag__>=1 && cod_zag__<=4)
+      {
+          if (HB_zag__>336) Kpm=1.4;
+          if (HB_zag__<=336) Kpm=1.3;
+          if (HB_zag__<=229) Kpm=1.0;
+
+      }
+      if(cod_zag__>=5 && cod_zag__<=40)
+      {
+          if (HB_zag__<229) Kpm=0.5;
+          if (HB_zag__>=229) Kpm=0.7;
+
+      }
+
+
+      if(cod_zag__>=41 && cod_zag__<=60)
+          Kpm=0.4;
+
+
+      Kpo=1.0;
+      if(cod_zag__ >=1 && cod_zag__ <=34)
+
+      {
+          if (cod_sozh__==0) Kpo=1.3;
+          if (cod_sozh__==1) Kpo=1.0;
+          if (cod_sozh__==2) Kpo=0.8;
+          if (cod_sozh__==3) Kpo=1.1;
+          if (cod_sozh__==4) Kpo=1.1;
+          if (cod_sozh__==5) Kpo=1.1;
+          if (cod_sozh__==6) Kpo=1.0;
+          if (cod_sozh__==7) Kpo=1.0;
+          if (cod_sozh__==8) Kpo=1.0;
+        }
+        if(cod_zag__ >=35 && cod_zag__ <=60){
+          if (cod_sozh__==0) Kpo=1.0;
+            else Kpo=0.8;
+        }
+
+      Kpk=1.2;
+      if (Ra__<=20) Kpk=1.1;
+      if (Ra__<=2.5) Kpk=1.0;
+      double result = q_*Kpm*Kpo*Kpk;
+      q= &result ;
+
+}
+
 void MainWindow::on_pushButton_clicked()
 {
     int code =0;
 
 
-    QString typ_stanok, model_stanok;
+     QString typ_stanok, model_stanok;
     int P_stanok, Lpx_stanok;
     //заготовка
-    QString mat_zag;
+     QString mat_zag;
     int cod_zag, HB_zag;
     //обработка
     bool usadka;
-    QString  mat_sozh;
+     QString  mat_sozh;
     int  cod_sozh;
     //отверстие
     double Ra;
     int D0, D, L, Kvalitet, HiOtkl, LowOtkl;
     //выходной текст
-    QString TxtFileName; //результаты
+     QString TxtFileName; //результаты
 
     //ввод параметров станка
 
@@ -376,21 +633,21 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::slotRadioToggled(bool)
 {
-    QRadioButton * rb = qobject_cast<QRadioButton*>(sender());
+     QRadioButton * rb =  qobject_cast<QRadioButton*>(sender());
     if (!rb) return;
     hbString = rb->text();
     indexHBRadioButton=listHBRadioButton.indexOf(rb);
 }
 
 void MainWindow::Protyagka_Tzil(
-QString typ_stanok_, QString model_stanok_, int P_stanok_, int Lpx_stanok_, QString mat_zag_, int cod_zag_, int HB_zag_,
-bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int L_, int Kvalitet_, int HiOtkl_, int LowOtkl_, QString nameFile
+QString typ_stanok_,  QString model_stanok_, int P_stanok_, int Lpx_stanok_,  QString mat_zag_, int cod_zag_, int HB_zag_,
+bool usadka_,  QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int L_, int Kvalitet_, int HiOtkl_, int LowOtkl_,  QString nameFile
 )
 {
- QString F;
+  QString F;
  int n, i, j, g, code, type_xvostovik, gamma_rezhzub, Zper, Zkal,
   gamma_kalzub, Zmax_o, Zmax_g, var_opt_o, shema, nk, komplekt,komplekt1,komplekt2;
- QString temp,temp1,temp2,temp3,temp4,temp5, temp6, forma_rezhzub, forma_kalzub;
+  QString temp,temp1,temp2,temp3,temp4,temp5, temp6, forma_rezhzub, forma_kalzub;
  double Lnp_o, Lnp_g, Ldop_d, Ldop_st_o, Ldop_st_g, l1,lp_o,lp_g,lk_o,lk_g,lz, dx,Fx, Px,P1_o,P1_g,Pp_o,Pp_g, shag_zub, Zmax_zub,b_o,h_kan, Trezh_o, Trezh_g, Tkal, Dzat_o, Dzat_g;
  double tp_o, tp_g, tk_o, tk_g, K_o,K_g, Szk_o,Szk_g, Sz, q;
  double hkp_o,rsp_o,bp_o,Rdp_o,Fkp_o;
@@ -398,7 +655,7 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
  double hkk_o,rsk_o,bk_o,Rdk_o,Fkk_o;
  double hkk_g,rsk_g,bk_g,Rdk_g,Fkk_g;
  double hkk,rsk,bk,Rdk,Fkk;
-  QVariant Szk;
+   QVariant Szk;
   bool Error_o, Error_g;
  double dzp_o[41][1001], Perimetr_o[41][1001], P_tek_o[41][1001], P_all_o[41][1001];
  double Szp_o[41], q_o[41];
@@ -418,7 +675,7 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
  //int  n_vik_per;
 
  //создание файла данных
-  QString TxtFileName_="Протяжка цилиндрическая.txt";
+   QString TxtFileName_="Протяжка цилиндрическая.txt";
    F=TxtFileName_;
 
  //вывод исходных данных
@@ -527,7 +784,7 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
    for (int i=1; i<=40; i++){
      Sz=Szp_o[i];
 
-    // Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+    Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
 
      q_o[i]=q*1.2;
      dzp_o[i][1]=D0_;
@@ -572,7 +829,7 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
    if (Ra_<=2.5){Zper=5; Zkal=6;}
    if (Ra_<=1.25){Zper=6; Zkal=7;}
    Sz=Aper_o/Zper;
-   //Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+   Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
    q=q*1.2;
    for (int i=1; i<=Zper; i++) {
      dzp_o[var_opt_o][Zp_o[var_opt_o]+i]=dzp_o[var_opt_o][Zp_o[var_opt_o]+i-1]+2*Aper_o/Zper;
@@ -584,7 +841,7 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
    if (Trezh_o>0.02) Trezh_o=0.02;
    Sz=0.01;
 
-  // Pril_UdNagruzka(Sz,gamma_kalzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+  Pril_UdNagruzka(Sz,gamma_kalzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
 
    q=q*1.2;
    for (int i=1; i<=Zkal; i++) {
@@ -626,7 +883,7 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
    for (int n=2; n<=5; n++) {
      for (int i=1; i<=40; i++) {
        Szp_g[n][i]=0;
-       q_g[n][i]=0;
+         q_g[n][i]=0;
        kol_grupp[n][i]=0;
        for (int j=1; j<=1000; j++) {
          dzp_g[n][i][j]=0;
@@ -647,15 +904,15 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
 
        Sz=Szp_g[n][1];
 
-       //Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
 
        P_tek_g[n][i][1]=q*Perimetr_g[n][i][1];
        P_all_g[n][i][1]=P_tek_g[n][i][1];
        Sz=Szp_g[n][i];
 
-       //Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
 
-       q_g[n][i]=q;
+         q_g[n][i]=q;
        j=1; kol_grupp[n][i]=0;
        while (dzp_g[n][i][j]<Dkal-2*Szp_g[n][i]) {
          j=j+1;
@@ -668,7 +925,7 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
            if (Szp_g[n][i]<=0.04) dzp_g[n][i][j]=dzp_g[n][i][j-1]-0.01;
                    else dzp_g[n][i][j]=dzp_g[n][i][j-1]-0.02;
            Sz=Szp_g[n][i]-0.01;
-           //Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+           Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
            Perimetr_g[n][i][j]=3.1416*dzp_g[n][i][j]/n;
            P_tek_g[n][i][j]=Perimetr_g[n][i][j]*q;
            if (j<=Zmax_g)
@@ -687,16 +944,16 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
        Perimetr_g[n][i][1]=3.1416*dzp_g[n][i][1];
        Sz=Szp_g[n][1];
 
-       //Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
 
        P_tek_g[n][i][1]=q*Perimetr_g[n][i][1];
 
        P_all_g[n][i][1]=P_tek_g[n][i][1];
        Sz=Szp_g[n][i];
 
-       //Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
 
-       q_g[n][i]=q;
+         q_g[n][i]=q;
        j=1; kol_grupp[n][i]=0;
        while (dzp_g[n][i][j]<Dkal-2*Szp_g[n][i]) {
          j=j+1;
@@ -715,7 +972,7 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
            if (Szp_g[n][i]<=0.04) dzp_g[n][i][j]=dzp_g[n][i][j-1]-0.01;
                    else dzp_g[n][i][j]=dzp_g[n][i][j-1]-0.02;
            Sz=Szp_g[n][i]-0.01;
-           //Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+           Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_,&q);
            Perimetr_g[n][i][j]=3.1416*dzp_g[n][i][j]/n;
            P_tek_g[n][i][j]=Perimetr_g[n][i][j]*q;
            if (j<=Zmax_g) P_all_g[n][i][j]=P_all_g[n][i][j-1]+P_tek_g[n][i][j];
@@ -733,13 +990,13 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
        Perimetr_g[n][i][1]=3.1416*dzp_g[n][i][1];
        Sz=Szp_g[n][1];
 
-       //Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
 
        P_tek_g[n][i][1]=q*Perimetr_g[n][i][1];
        P_all_g[n][i][1]=P_tek_g[n][i][1];
        Sz=Szp_g[n][i];
-      // Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
-       q_g[n][i]=q;
+      Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
+         q_g[n][i]=q;
        j=1; kol_grupp[n][i]=0;
        while (dzp_g[n][i][j]<Dkal-2*Szp_g[n][i]) {
          j=j+1;
@@ -764,7 +1021,7 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
            if (Szp_g[n][i]<=0.04) dzp_g[n][i][j]=dzp_g[n][i][j-1]-0.01;
                    else dzp_g[n][i][j]=dzp_g[n][i][j-1]-0.02;
            Sz=Szp_g[n][i]-0.01;
-           //Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+           Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
            Perimetr_g[n][i][j]=3.1416*dzp_g[n][i][j]/n;
            P_tek_g[n][i][j]=Perimetr_g[n][i][j]*q;
            if (j<=Zmax_g) P_all_g[n][i][j]=P_all_g[n][i][j-1]+P_tek_g[n][i][j];
@@ -782,13 +1039,13 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
        Perimetr_g[n][i][1]=3.1416*dzp_g[n][i][1];
        Sz=Szp_g[n][1];
 
-      // Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+      Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
 
        P_tek_g[n][i][1]=q*Perimetr_g[n][i][1];
        P_all_g[n][i][1]=P_tek_g[n][i][1];
        Sz=Szp_g[n][i];
-       //Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
-       q_g[n][i]=q;
+       Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
+         q_g[n][i]=q;
        j=1; kol_grupp[n][i]=0;
        while (dzp_g[n][i][j]<Dkal-2*Szp_g[n][i]) {
          j=j+1;
@@ -818,7 +1075,7 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
          j=j+1;
            if (Szp_g[n][i]<=0.04) dzp_g[n][i][j]=dzp_g[n][i][j-1]-0.01; else dzp_g[n][i][j]=dzp_g[n][i][j-1]-0.02;
            Sz=Szp_g[n][i]-0.01;
-           //Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+           Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
            Perimetr_g[n][i][j]=3.1416*dzp_g[n][i][j]/n;
            P_tek_g[n][i][j]=Perimetr_g[n][i][j]*q;
            if (j<=Zmax_g) P_all_g[n][i][j]=P_all_g[n][i][j-1]+P_tek_g[n][i][j];
@@ -922,7 +1179,7 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
    if (Ra_<=1.25){Zper=6; Zkal=7;}
    Sz=Aper_g/Zper;
 
- //  Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+ //  Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_,   q);
 
    for (int i=1; i<=Zper; i++) {
      dzp_g[n][var_opt_g[n]][Zp_g[n][var_opt_g[n]]+i]=dzp_g[n][var_opt_g[n]][Zp_g[n][var_opt_g[n]]+i-1]+2*Aper_g/Zper;
@@ -932,7 +1189,7 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
    lp_g=tp_g*(Zp_g[n][var_opt_g[n]]+Zper-1);
    Trezh_g=0.2*Szp_g[n][var_opt_g[n]];
    Sz=0.01;
-   //Pril_UdNagruzka(Sz,gamma_kalzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, q);
+   Pril_UdNagruzka(Sz,gamma_kalzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
    for (int i=1; i<=Zkal; i++) {
      dzp_g[n][var_opt_g[n]][Zp_g[n][var_opt_g[n]]+i+Zper]=dzp_g[n][var_opt_g[n]][Zp_g[n][var_opt_g[n]]+i-1+Zper];
      Perimetr_g[n][var_opt_g[n]][Zp_g[n][var_opt_g[n]]+i+Zper]=3.1416*dzp_g[n][var_opt_g[n]][Zp_g[n][var_opt_g[n]]+i-1+Zper];
@@ -999,25 +1256,25 @@ bool usadka_, QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, int
            WriteFile(F, "Переходный зуб №"+QString::number(i)+": диаметр dz= "+temp1+"(-"+temp+") мм,  рабочий периметр Пz= "+temp2+" мм,  нагрузка Pz= "+temp3+" Н");
         }
          for (int i=Zp_o[var_opt_o]+Zper+1; i<= Zp_o[var_opt_o]+Zper+Zkal; i++) {
-          temp1 = QString::number(dzp_o[var_opt_o][i]);
-          temp2 = QString::number(Perimetr_o[var_opt_o][i]);
-          temp3 = QString::number(P_tek_o[var_opt_o][i]);
+          temp1 =   QString::number(dzp_o[var_opt_o][i]);
+          temp2 =   QString::number(Perimetr_o[var_opt_o][i]);
+          temp3 =   QString::number(P_tek_o[var_opt_o][i]);
 
            if (usadka_==true) Tkal=Tizg+delta;
            else Tkal=Tizg-delta;
-           temp= QString::number(Tkal);
+           temp=   QString::number(Tkal);
            WriteFile(F, "Калибрующий зуб №"+QString::number(i)+": диаметр dz= "+temp1+"(-"+temp+") мм,  рабочий периметр Пz= "+temp2+" мм,  нагрузка Pz= "+temp3+" Н");
         }
          WriteFile(F, "Всего зубьев: "+QString::number(Zp_o[var_opt_o]+Zper+Zkal)+"; в том числе: режущих - "+QString::number(Zp_o[var_opt_o])+", переходных - "+QString::number(Zper)+", калибрующих - "+QString::number(Zkal));
          WriteFile(F, "На зубьях №№ 1-"+QString::number(Zp_o[var_opt_o]+Zper)+" в шахматном порядке выполняем стружкоделительные канавки: "+QString::number(nk)+" канавок");
-         temp = QString::number(h_kan);
+         temp =   QString::number(h_kan);
 
          WriteFile(F, "Глубина стружкоделительных канавок: С= "+temp+" мм (см. приложение)");
          WriteFile(F, "");
          WriteFile(F, "Передний угол на режущих и переходных зубьях: "+QString::number(gamma_rezhzub)+" градусов,  задний угол: 3 градуса,  форма зуба: "+forma_rezhzub+" (см. приложение)");
          WriteFile(F, "Передний угол на калибрующих зубьях: "+QString::number(gamma_kalzub)+" градусов,  задний угол: 1 градус,  форма зуба: "+forma_kalzub+" (см. приложение)");
          WriteFile(F, "Угол правки шлифовального круга для заточки переднего угла : 45 градусов");
-         temp = QString::number(Dzat_o);
+         temp =   QString::number(Dzat_o);
          WriteFile(F, "Наибольший диаметр круга для заточки: Dзат="+temp+" мм");
          WriteFile(F, "");
 
