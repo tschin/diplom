@@ -5,6 +5,8 @@
 #include <QHeaderView>
 #include <QRadioButton>
 #include <QFile>
+#include"math.h"
+#include<QtMath>
 #include <QDir>
 #include <QVariant>
 struct tool
