@@ -753,7 +753,7 @@ bool usadka_,  QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, in
  //расчёт зубьев по одинарной схеме резания
  //
    shag_zub=1.7*sqrt(L_);
-  // Pril_Kanavka(shag_zub, tp_o,hkp_o,rsp_o,bp_o,Rdp_o,Fkp_o);
+  Pril_Kanavka(shag_zub, &tp_o,&hkp_o,&rsp_o,&bp_o,&Rdp_o,&Fkp_o);
    P1_o=0.25*3.14*400*pow((D0_-2*hkp_o),2);
    if ((Px<=P1_o)&&(Px<=0.8*P_stanok_)) Pp_o=Px;
    if ((P1_o<=Px)&&(P1_o<=0.8*P_stanok_)) Pp_o=P1_o;
@@ -852,7 +852,7 @@ bool usadka_,  QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, in
 
    shag_zub=tp_o*2/3;
 
-  // Pril_Kanavka(shag_zub, tk_o,hkk_o,rsk_o,bk_o,Rdk_o,Fkk_o);
+  Pril_Kanavka(shag_zub, &tk_o,&hkk_o,&rsk_o,&bk_o,&Rdk_o,&Fkk_o);
 
    lk_o=tk_o*Zkal;
    Lnp_o=l1+lp_o+lk_o+lz;
@@ -864,7 +864,7 @@ bool usadka_,  QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, in
  //
    shag_zub=2*sqrt(L_);
 
-  // Pril_Kanavka(shag_zub, tp_g,hkp_g,rsp_g,bp_g,Rdp_g,Fkp_g);
+  Pril_Kanavka(shag_zub, &tp_g,&hkp_g,&rsp_g,&bp_g,&Rdp_g,&Fkp_g);
 
    P1_g=0.25*3.14*400*pow((D0_-2*hkp_g),2);
    if ((Px<=P1_g)&&(Px<=0.8*P_stanok_)) Pp_g=Px;
@@ -1179,7 +1179,7 @@ bool usadka_,  QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, in
    if (Ra_<=1.25){Zper=6; Zkal=7;}
    Sz=Aper_g/Zper;
 
- //  Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_,   q);
+   Pril_UdNagruzka(Sz,gamma_rezhzub,cod_zag_,HB_zag_,cod_sozh_,Ra_, &q);
 
    for (int i=1; i<=Zper; i++) {
      dzp_g[n][var_opt_g[n]][Zp_g[n][var_opt_g[n]]+i]=dzp_g[n][var_opt_g[n]][Zp_g[n][var_opt_g[n]]+i-1]+2*Aper_g/Zper;
@@ -1196,7 +1196,7 @@ bool usadka_,  QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, in
      P_tek_g[n][var_opt_g[n]][Zp_g[n][var_opt_g[n]]+i+Zper]=q*Perimetr_g[n][var_opt_g[n]][Zp_g[n][var_opt_g[n]]+i-1+Zper];
   }
    shag_zub=tp_g*2/3;
-  // Pril_Kanavka(shag_zub, tk_g,hkk_g,rsk_g,bk_g,Rdk_g,Fkk_g);
+  Pril_Kanavka(shag_zub, &tk_g,&hkk_g,&rsk_g,&bk_g,&Rdk_g,&Fkk_g);
    lk_g=tk_g*Zkal;
    Lnp_g=l1+lp_g+lk_g+lz;
    Ldop_d=40*D0_;
@@ -1413,8 +1413,39 @@ bool usadka_,  QString mat_sozh_, int cod_sozh_, double Ra_, int D0_, int D_, in
            if (komplekt1>=komplekt2) komplekt=komplekt1; else komplekt=komplekt2;
            WriteFile(F, "Длина протяжки не проходит по жёсткости и ходу ползуна, проектируем комплект протяжек из: "+QString::number(komplekt)+" штук");
         }
-      }
-  }
+    }
+}
+
+void MainWindow::Pril_Kanavka(double shag_zub, double *tp, double *hk, double *rs, double *b, double *Rd, double *Fk)
+{
+    if (shag_zub>=32) { *tp=32; *hk=12.0; *rs=6.0; *b=12.0; *Rd=20.0; *Fk=113.1; }
+    if (shag_zub<32) { *tp=30; *hk=12.0; *rs=6.0; *b=11.5; *Rd=20.0; *Fk=113.1; }
+    if (shag_zub<30) { *tp=28; *hk=12.0; *rs=6.0; *b=9.5; *Rd=20.0; *Fk=113.1; }
+    if (shag_zub<28) { *tp=26; *hk=10.0; *rs=5.0; *b=10.5; *Rd=16.0; *Fk=78.5; }
+    if (shag_zub<26) { *tp=25; *hk=10.0; *rs=5.0; *b=9.5; *Rd=16.0; *Fk=78.5; }
+    if (shag_zub<25) { *tp=24; *hk=10.0; *rs=5.0; *b=8.5; *Rd=16.0; *Fk=78.5; }
+    if (shag_zub<24) { *tp=22; *hk=9.0; *rs=4.5; *b=8.0; *Rd=14.0; *Fk=63.6; }
+    if (shag_zub<22) { *tp=21; *hk=9.0; *rs=4.5; *b=7.0; *Rd=14.0; *Fk=63.6; }
+    if (shag_zub<21) { *tp=20; *hk=9.0; *rs=4.5; *b=6.0; *Rd=14.0; *Fk=63.6; }
+    if (shag_zub<20) { *tp=19; *hk=8.0; *rs=4.0; *b=7.0; *Rd=12.0; *Fk=50.3; }
+    if (shag_zub<19) { *tp=18; *hk=8.0; *rs=4.0; *b=6.0; *Rd=12.0; *Fk=50.3; }
+    if (shag_zub<18) { *tp=17; *hk=7.0; *rs=3.5; *b=6.0; *Rd=11.0; *Fk=38.5; }
+    if (shag_zub<17) { *tp=16; *hk=7.0; *rs=3.5; *b=5.0; *Rd=11.0; *Fk=38.5; }
+    if (shag_zub<16) { *tp=15; *hk=6.0; *rs=3.0; *b=5.5; *Rd=10.0; *Fk=28.3; }
+    if (shag_zub<15) { *tp=14; *hk=6.0; *rs=3.0; *b=4.5; *Rd=10.0; *Fk=28.3; }
+    if (shag_zub<14) { *tp=13; *hk=5.0; *rs=2.5; *b=5.0; *Rd=8.0; *Fk=19.6; }
+    if (shag_zub<13) { *tp=12; *hk=5.0; *rs=2.5; *b=4.0; *Rd=8.0; *Fk=19.6; }
+    if (shag_zub<12) { *tp=11; *hk=4.5; *rs=2.3; *b=4.0; *Rd=7.0; *Fk=15.9; }
+    if (shag_zub<11) { *tp=10; *hk=4.0; *rs=2.0; *b=3.5; *Rd=6.0; *Fk=12.6; }
+    if (shag_zub<10) { *tp=9; *hk=3.6; *rs=1.8; *b=3.5; *Rd=5.5; *Fk=9.6; }
+    if (shag_zub<9) { *tp=8; *hk=3.6; *rs=1.8; *b=2.5; *Rd=5.5; *Fk=9.6; }
+    if (shag_zub<8) { *tp=7; *hk=3.0; *rs=1.5; *b=2.3; *Rd=5.0; *Fk=7.1; }
+    if (shag_zub<7) { *tp=6; *hk=2.5; *rs=1.3; *b=2.0; *Rd=4.0; *Fk=4.0; }
+    if (shag_zub<6) { *tp=5.5; *hk=2.0; *rs=1.0; *b=2.5; *Rd=3.0; *Fk=3.14; }
+    if (shag_zub<5.5) { *tp=5.0; *hk=2.0; *rs=1.0; *b=2.0; *Rd=3.0; *Fk=3.14; }
+    if (shag_zub<5.0) { *tp=4.5; *hk=2.0; *rs=1.0; *b=1.5; *Rd=3.0; *Fk=3.14; }
+    if (shag_zub<4.5) { *tp=4.0; *hk=1.8; *rs=0.9; *b=1.2; *Rd=2.8; *Fk=2.54; }
+}
  //закрытие файла данных
 
 
